@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="qiankun 是一个基于 single-spa 的微前端实现库，旨在帮助大家能更简单、无痛的构建一个生产可用微前端架构系统。 qiankun 的核心设计理念 简单由于主应用微应用都能做到技术栈无关，qiankun 对于用户而言只是一个类似 jQuery 的库，你需要调用几个 qiankun 的 API 即可完成应用的微前端改造。同时由于 qiankun 的 HTML entry 及沙箱的设计，使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微前端-qiankun">
+<meta property="og:url" content="http://example.com/2023/03/29/%E5%BE%AE%E5%89%8D%E7%AB%AF-qiankun/index.html">
+<meta property="og:site_name" content="ljylwnxx的博客">
+<meta property="og:description" content="qiankun 是一个基于 single-spa 的微前端实现库，旨在帮助大家能更简单、无痛的构建一个生产可用微前端架构系统。 qiankun 的核心设计理念 简单由于主应用微应用都能做到技术栈无关，qiankun 对于用户而言只是一个类似 jQuery 的库，你需要调用几个 qiankun 的 API 即可完成应用的微前端改造。同时由于 qiankun 的 HTML entry 及沙箱的设计，使">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-29T04:18:39.000Z">
+<meta property="article:modified_time" content="2023-04-11T06:54:40.195Z">
+<meta property="article:author" content="ljylwnxx">
+<meta property="article:tag" content="微前端">
+<meta name="twitter:card" content="summary">
+
+
+<title >微前端-qiankun</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.png?v=2.0.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.0.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_4020021_2ar0fw3x9h6.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"ljylwnxx","root":"/","typed_text":["今日目标,没有bug","一行代码,定义无限可能","永不脱发,无Bug"],"theme_version":"2.0.7","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/logo.png","icon32":"/img/favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":null,"visibilitychange":true,"hidden":"/failure.png","showText":"(/≧▽≦/)咦！又好啦！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"iconfont icon-sun","moon":"iconfont icon-moon","play":"iconfont icon-play","email":"iconfont icon-email","next":"iconfont icon-xiayibu_next","calendar":"iconfont icon-calendar","clock":"iconfont icon-clock","user":"iconfont icon-user","back_top":"iconfont icon-i-back-top","close":"iconfont icon-close","search":"iconfont icon-search","user_tag":"iconfont icon-user-tag","toc_tag":"iconfont icon-fenleimulu","read":"iconfont icon-read","arrows":"iconfont icon-arrows-h","double_arrows":"iconfont icon-zhankai","copy":"iconfont icon-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"covers":["/images/defaultcover.png","/images/defaultimg.png","/images/defaultimg1.png","/images/defaultimg2.png","/images/defaultimg3.png","/images/defaultimg4.png","/images/defaultimg5.png","/images/defaultimg6.png","/images/defaultimg7.png","/images/default.png"],"search":{"enable":true,"domain":null,"type":"local","preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-04-11 2023-04-11T14:54:40+08:00"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont iconfont icon-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont iconfont icon-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/logo.png">
+    
+    
+        <div class="trm-logo-text">
+            LjylWnxx
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友情链接
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/tags/" target="">
+                    标签
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/categories/" target="">
+                    分类
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			<!--  -->
+    <!-- mode switcher place -->
+    <!-- <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont iconfont icon-moon"></i>
+        </div>
+    </div> -->
+    <!-- mode switcher place end -->
+<!--  -->
+<!-- 
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+   -->
+  
+
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont iconfont icon-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/images/qiankuncover.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            微前端-qiankun
+                        </h1>
+                            
+                        <!-- 
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                         -->
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont iconfont icon-user-tag"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont iconfont icon-fenleimulu"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.png">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        LjylWnxx
+    </h5>
+    
+        <div class="trm-label">
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+                <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-github"></i>
+        </a>
+    
+        <a href="https://gitee.com" title="gitee" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-gitee"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+                <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                个签:
+            </div>
+            <div class="trm-label trm-label-light">
+                Hello World!
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+                
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:ljylwnxx@163.com" class="trm-btn">
+            联系我
+            <i class="iconfont iconfont icon-email"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#qiankun-的核心设计理念"  data-scroll-to="#qiankun-的核心设计理念"><span class="toc-number">1.</span> <span class="toc-text">qiankun 的核心设计理念</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#为什么不是-iframe"  data-scroll-to="#为什么不是-iframe"><span class="toc-number">2.</span> <span class="toc-text">为什么不是 iframe</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#特性"  data-scroll-to="#特性"><span class="toc-number">3.</span> <span class="toc-text">特性</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#快速构建一个qiankun微前端应用"  data-scroll-to="#快速构建一个qiankun微前端应用"><span class="toc-number">4.</span> <span class="toc-text">快速构建一个qiankun微前端应用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#主应用的配置"  data-scroll-to="#主应用的配置"><span class="toc-number">4.1.</span> <span class="toc-text">主应用的配置</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#微应用配置"  data-scroll-to="#微应用配置"><span class="toc-number">4.2.</span> <span class="toc-text">微应用配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#实践"  data-scroll-to="#实践"><span class="toc-number">5.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#主应用"  data-scroll-to="#主应用"><span class="toc-number">5.1.</span> <span class="toc-text">主应用</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#微应用"  data-scroll-to="#微应用"><span class="toc-number">5.2.</span> <span class="toc-text">微应用</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-calendar trm-icon"></i><br>
+            03/29
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-clock trm-icon"></i><br>
+            12:18
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-user trm-icon"></i><br>
+            ljylwnxx
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <p>qiankun 是一个基于 single-spa 的微前端实现库，旨在帮助大家能更简单、无痛的构建一个生产可用微前端架构系统。</p>
+<h1 id="qiankun-的核心设计理念"><a href="#qiankun-的核心设计理念" class="headerlink" title="qiankun 的核心设计理念"></a>qiankun 的核心设计理念</h1><ol>
+<li>简单<br>由于主应用微应用都能做到技术栈无关，qiankun 对于用户而言只是一个类似 jQuery 的库，你需要调用几个 qiankun 的 API 即可完成应用的微前端改造。同时由于 qiankun 的 HTML entry 及沙箱的设计，使得微应用的接入像使用 iframe 一样简单。</li>
+<li>解耦/技术栈无关<br>微前端的核心目标是将巨石应用拆解成若干可以自治的松耦合微应用，而 qiankun 的诸多设计均是秉持这一原则，如 HTML entry、沙箱、应用间通信等。这样才能确保微应用真正具备 独立开发、独立运行 的能力。</li>
+</ol>
+<h1 id="为什么不是-iframe"><a href="#为什么不是-iframe" class="headerlink" title="为什么不是 iframe"></a>为什么不是 iframe</h1><p>一. 为什么不用 iframe，这几乎是所有微前端方案第一个会被 challenge 的问题。但是大部分微前端方案又不约而同放弃了 iframe 方案，自然是有原因的，并不是为了 “炫技” 或者刻意追求 “特立独行”。<br>如果不考虑体验问题，iframe 几乎是最完美的微前端解决方案了。<br>二. iframe 最大的特性就是提供了浏览器原生的硬隔离方案，不论是样式隔离、js 隔离这类问题统统都能被完美解决。但他的最大问题也在于他的隔离性无法被突破，导致应用间上下文无法被共享，随之带来的开发体验、产品体验的问题。</p>
+<ol>
+<li>url 不同步。浏览器刷新 iframe url 状态丢失、后退前进按钮无法使用。</li>
+<li>UI 不同步，DOM 结构不共享。想象一下屏幕右下角 1/4 的 iframe 里来一个带遮罩层的弹框，同时我们要求这个弹框要浏览器居中显示，还要浏览器 resize 时自动居中..</li>
+<li>全局上下文完全隔离，内存变量不共享。iframe 内外系统的通信、数据同步等需求，主应用的 cookie 要透传到根域名都不同的子应用中实现免登效果。</li>
+<li>慢。每次子应用进入都是一次浏览器上下文重建、资源重新加载的过程。<br>其中有的问题比较好解决(问题1)，有的问题我们可以睁一只眼闭一只眼(问题4)，但有的问题我们则很难解决(问题3)甚至无法解决(问题2)，而这些无法解决的问题恰恰又会给产品带来非常严重的体验问题， 最终导致我们舍弃了 iframe 方案。</li>
+</ol>
+<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><ol>
+<li>基于 single-spa 封装，提供了更加开箱即用的 API。</li>
+<li>技术栈无关，任意技术栈的应用均可 使用/接入，不论是 React/Vue/Angular/JQuery 还是其他等框架。</li>
+<li>HTML Entry 接入方式，让你接入微应用像使用 iframe 一样简单。</li>
+<li>样式隔离，确保微应用之间样式互相不干扰。</li>
+<li>JS 沙箱，确保微应用之间 全局变量/事件 不冲突。</li>
+<li>资源预加载，在浏览器空闲时间预加载未打开的微应用资源，加速微应用打开速度。</li>
+<li>umi 插件，提供了 @umijs/plugin-qiankun 供 umi 应用一键切换成微前端架构系统。</li>
+</ol>
+<h1 id="快速构建一个qiankun微前端应用"><a href="#快速构建一个qiankun微前端应用" class="headerlink" title="快速构建一个qiankun微前端应用"></a>快速构建一个qiankun微前端应用</h1><h2 id="主应用的配置"><a href="#主应用的配置" class="headerlink" title="主应用的配置"></a>主应用的配置</h2><ol>
+<li>首先需要创建一个主应用和至少一个微应用</li>
+<li>然后在主应用中安装微前端库：qiankun，yarn add qiankun # 或者 npm i qiankun -S</li>
+<li>在主应用的入口处导入qiankun中的两个方法registerMicroApps和start方法</li>
+<li>调用registerMicroApps方法注册各个微应用，最后调用start方法来启动qiankun</li>
+</ol>
+<h2 id="微应用配置"><a href="#微应用配置" class="headerlink" title="微应用配置"></a>微应用配置</h2><ol>
+<li>微应用不需要安装qiankun，但必须要在自己的入口处导出三个方法：<br>bootstrap：在微应用启动（初始化）的时候调用一次（只会调用一次）<br>mount：微应用渲染函数，每次微应用进入时都会调用<br>unmount：每次微应用切出或卸载时都会调用</li>
+</ol>
+<p><strong>注意：</strong>以上三个方法即使不做任何事也必须要导出，否则会报错<br>2. 为了保证每个微应用还能独立运行，还需要在入口处根据全局属性window.__ POWERED_BY_QIANKUN __ 来判断当前应用是由主应用启动还是自己独立运行，从而做出相应的逻辑处理。</p>
+<ul>
+<li>如果是独立运行则不需额外处理，只是按照原有逻辑进行渲染即可</li>
+<li>如果是由主应用启动的，则需将全局变量window.__ INJECTED_PUBLIC_PATH_BY_QIANKUN __ 的值赋给变量 __ webpack_public_path __</li>
+</ul>
+<ol start="3">
+<li>如果是webpack等工具构建的应用（如vue或react等）则还需要给微应用的打包工具（webpack）增加一些相应的配置，一般需要配置output的library和libraryTarget。</li>
+<li>最后因为不同应用会部署在不同的域下，所以肯定还会有个跨域问题，一般会在服务器端再进行一个允许跨域的配置。</li>
+</ol>
+<h1 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h1><h2 id="主应用"><a href="#主应用" class="headerlink" title="主应用"></a>主应用</h2><ol>
+<li>利用vue脚手架创建一个vue2.0项目：main-app（vue create main-app），建议选择手动模式可以将Router勾选上，并且需要使用history路由模式。</li>
+<li>打开项目main-app，安装qiankun（npm install qiankun –save）</li>
+<li>修改App.vue，新增一个subapp的router-link，to值为“/subapp”，并在router-view的下方新增一个id为vueContainer的div盒子（用于承载子应用）。</li>
+<li>修改views/Home.vue，将默认内容删除，并改为： This is a home page in qiankun-main（非必须，可根据自己喜好随便改动，也可使用默认内容）</li>
+<li>修改views/About.vue，将内容改为：This is an about page in qiankun-main（非必须，可根据自己喜好随便改动，也可使用默认内容）</li>
+<li>修改main.js，导入qiankun中的registerMicroApps和start两个方法，注册子应用并启动qiankun<br>下面看下修改后的完整代码（创建项目和安装qiankun的步骤就省略了）<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- App.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;div id=&quot;app&quot;&gt;</span><br><span class="line">		&lt;div id=&quot;nav&quot;&gt;</span><br><span class="line">			&lt;router-link to=&quot;/&quot;&gt;Home&lt;/router-link&gt;</span><br><span class="line">			&lt;router-link to=&quot;/about&quot;&gt;About&lt;/router-link&gt;</span><br><span class="line">			&lt;router-link to=&quot;/subapp&quot;&gt;sub-app&lt;/router-link&gt; &lt;!--新增部分--&gt;</span><br><span class="line">		&lt;/div&gt;</span><br><span class="line">		&lt;router-view /&gt;</span><br><span class="line">		&lt;div id=&quot;vueContainer&quot;&gt;&lt;/div&gt;&lt;!--新增部分，用于承载子应用--&gt;</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- views/Home.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;div class=&quot;home&quot;&gt;This is a home page in qiankun-main&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- views/About.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;div class=&quot;home&quot;&gt;This is an about page in qiankun-main&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- main.js --&gt;</span><br><span class="line">import Vue from &#x27;vue&#x27;</span><br><span class="line">import App from &#x27;./App.vue&#x27;</span><br><span class="line">import router from &#x27;./router&#x27;</span><br><span class="line">&lt;!-- ======================新增内容开始=============================== --&gt;</span><br><span class="line">import &#123;registerMicroApps, start&#125; from &#x27;qiankun&#x27; //新增部分，导入qiankun中的两个方法</span><br><span class="line">const apps = [</span><br><span class="line">&#123;</span><br><span class="line">	name:&#x27;subApp&#x27;, //子应用的名称</span><br><span class="line">	entry:&#x27;//localhost:8081&#x27;,//子应用的域名</span><br><span class="line">	container:&#x27;#vueContainer&#x27;,//承载子应用的容器，在上面App.vue中定义</span><br><span class="line">	activeRule:&#x27;/subapp&#x27;, // 被激活的子应用的路由</span><br><span class="line">&#125;</span><br><span class="line">]</span><br><span class="line">registerMicroApps(apps);//注册子应用</span><br><span class="line">start();//启动qiankun</span><br><span class="line">&lt;!-- ======================新增内容结束=============================== --&gt;</span><br><span class="line">new Vue(&#123;</span><br><span class="line">	router,</span><br><span class="line">	render: h =&gt; h(App)</span><br><span class="line">&#125;).$mount(&#x27;#app&#x27;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- router/index.js --&gt;</span><br><span class="line">import Vue from &#x27;vue&#x27;</span><br><span class="line">import VueRouter from &#x27;vue-router&#x27;</span><br><span class="line">import Home from &quot;../views/Home&quot;;</span><br><span class="line">import About from &quot;../views/About&quot;;</span><br><span class="line">Vue.use(VueRouter)</span><br><span class="line">const routes = [&#123;</span><br><span class="line">        path: &#x27;/&#x27;,</span><br><span class="line">        name: &#x27;Home&#x27;,</span><br><span class="line">        // redirect: &#x27;/home&#x27;,</span><br><span class="line">        component: Home,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        path: &#x27;/about&#x27;,</span><br><span class="line">        name: &#x27;About&#x27;,</span><br><span class="line">        component: About,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br><span class="line">&lt;!-- 以下是修改后的代码 --&gt;</span><br><span class="line">const router = new VueRouter(&#123;</span><br><span class="line">	mode:&#x27;history&#x27;,</span><br><span class="line">	base: &#x27;&#x27;,</span><br><span class="line">	routes</span><br><span class="line">&#125;)</span><br><span class="line">export default router;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="微应用"><a href="#微应用" class="headerlink" title="微应用"></a>微应用</h2><p>微应用中主要需要修改的地方有：main.js、vue.config.js和router/index.js，其余页面部分根据自己喜好可改可不改，本文为了便于区分主子应用的内容将对Home.vue和About.vue页面进行微小的改动</p>
+<ol>
+<li>利用vue脚手架创建一个vue2.0项目：sub-app（vue create sub-app），建议选择手动模式可以将Router勾选上，并且需要使用history路由模式</li>
+<li>修改views/Home.vue，在原有内容的基础上新增语句：“This is a home page in sub-app”（根据个人喜好，可改可不改）<br>修改views/About.vue，将内容改为：“This is an about page in sub-app”（根据个人喜好，可改可不改）</li>
+<li>修改main.js（必需）</li>
+</ol>
+<ul>
+<li>将创建Vue实例的代码部分提取到一个函数render中，render函数接收一个参数props</li>
+<li>判断window.__ POWERED_BY_QIANKUN __，如果是从qiankun启动则将window. __ INJECTED_PUBLIC_PATH_BY_QIANKUN __ 的值赋值给 __ webpack_public_path __ ，否则直接调用render方法表示子应用是独立运行</li>
+<li>导出3个必需的方法bootstrap，mount和unmount；bootstrap函数体内容可为空但函数必须要导出。mount函数中调用render方法进行子应用渲染。unmount函数中将render方法中创建的vue实例销毁。</li>
+</ul>
+<ol start="4">
+<li>修改router/index.js，指定base值为：“/vueChild”</li>
+<li>创建vue.config.js，在该文件中配置允许跨域：“ Access-Control-Allow-Origin：’*’ ”，并配置webpack的output.library和output.libraryTarget</li>
+</ol>
+<p>各部分完整代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!--======================== views/Home.vue ====================--&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;div class=&quot;home&quot;&gt;</span><br><span class="line">		&lt;img alt=&quot;Vue logo&quot; src=&quot;../assets/logo.png&quot; /&gt;</span><br><span class="line">		&lt;h1 style=&quot;color:red;&quot;&gt;This is a home page in sub-app&lt;/h1&gt;</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!--======================== views/About.vue ====================--&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;div class=&quot;About&quot;&gt;		</span><br><span class="line">		This is an about page in sub-app</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!--  main.js --&gt;</span><br><span class="line">import Vue from &#x27;vue&#x27;</span><br><span class="line">import App from &#x27;./App.vue&#x27;</span><br><span class="line">import router from &#x27;./router&#x27;</span><br><span class="line">let instance = null; //设置全局变量，用于保存或销毁Vue实例</span><br><span class="line">function render(props = &#123;&#125;)&#123;</span><br><span class="line">	const &#123; container &#125; = props</span><br><span class="line">	instance = new Vue(&#123;</span><br><span class="line">		router,</span><br><span class="line">		render: h =&gt; h(App)</span><br><span class="line">	&#125;).$mount(container ? container.querySelector(&quot;#app&quot;) : &quot;#app&quot;);//用于限定当前上下文下的#app，防止与主应用中的#app冲突</span><br><span class="line">&#125;</span><br><span class="line">if(window.__POWERED_BY_QIANKUN__)&#123;</span><br><span class="line">	__webpack_public_path__ = window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__</span><br><span class="line">&#125;else&#123;</span><br><span class="line">	render();</span><br><span class="line">	console.log(&#x27;子应用独立运行&#x27;)</span><br><span class="line">&#125;</span><br><span class="line">export async function bootstrap(props)&#123;</span><br><span class="line">	console.log(&#x27;这里暂时可以什么都不用做，但方法必须要导出&#x27;)</span><br><span class="line">&#125;</span><br><span class="line">export async function mount(props)&#123;</span><br><span class="line">	render(props);//从qiankun启动</span><br><span class="line">&#125;</span><br><span class="line">export async function unmount(props)&#123;</span><br><span class="line">	instance.$destroy();//销毁子应用实例</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- vue.config.js --&gt;</span><br><span class="line">module.exports = &#123;</span><br><span class="line">	lintOnSave: false,</span><br><span class="line">	devServer:&#123;</span><br><span class="line">		port:8081,</span><br><span class="line">		headers:&#123;</span><br><span class="line">			&quot;Access-Control-Allow-Origin&quot;: &quot;*&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	configureWebpack:&#123;</span><br><span class="line">		output:&#123;</span><br><span class="line">			library:&#x27;subApp&#x27;,</span><br><span class="line">			libraryTarget:&#x27;umd&#x27;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- router/index.js --&gt;</span><br><span class="line">// ...原有代码省略</span><br><span class="line">//修改后的代码</span><br><span class="line">const router = new VueRouter(&#123;</span><br><span class="line">	mode:&#x27;history&#x27;,</span><br><span class="line">	base:&#x27;/subapp&#x27;,</span><br><span class="line">	routes</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</article>
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/29/webpack%E8%BF%81%E7%A7%BBvite/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/images/%E8%BF%81%E7%A7%BBvitecover.png">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">
+                    知识点
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/29/webpack%E8%BF%81%E7%A7%BBvite/" class="trm-anima-link">
+                    webpack迁移vite
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/29</li>
+                <li>21:41</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/27/Vue-Cli/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/images/vueclicover.png">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">
+                    知识点
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/27/Vue-Cli/" class="trm-anima-link">
+                    基于Webpack5搭建一个Vue-Cli
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/27</li>
+                <li>21:30</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2023</span>
+            <span class="footer-separator"data-separator=" | "></span>
+            <span class="trm-accent-color">LjylWnxx</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            博客已运行 <span id="since" class="trm-accent-color"></span> 天
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        var BirthDay = new Date("08/16/2022 21:45:54");
+        var today = new Date();
+        var timeold = (today.getTime() - BirthDay.getTime());
+        var msPerDay = 24 * 60 * 60 * 1000
+        var day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont iconfont icon-read"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont iconfont icon-arrows-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont iconfont icon-i-back-top"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont iconfont icon-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont iconfont icon-close"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.0.7"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.0.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.7"></script>
+
+</body>
+
+</html>

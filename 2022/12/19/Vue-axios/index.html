@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="众所周知，现在开发项目大多采用前后端分离的模式，个人采用vue做前端项目比较多一点。说到前端，那前端肯定只是负责渲染展示数据的，那么这里有一个问题，数据从哪里来呢？在开发阶段，大多会采用mock模拟数据，做一些假数据来满足暂时的需求，但是最终生产上的数据肯定是从后端接口获取而来。如何在vue项目上从后端获取数据呢？这就是我们今天要说的内容啦～ 一、前端从后端获取数据的方式通常采用http&#x2F;http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue-axios">
+<meta property="og:url" content="http://example.com/2022/12/19/Vue-axios/index.html">
+<meta property="og:site_name" content="ljylwnxx的博客">
+<meta property="og:description" content="众所周知，现在开发项目大多采用前后端分离的模式，个人采用vue做前端项目比较多一点。说到前端，那前端肯定只是负责渲染展示数据的，那么这里有一个问题，数据从哪里来呢？在开发阶段，大多会采用mock模拟数据，做一些假数据来满足暂时的需求，但是最终生产上的数据肯定是从后端接口获取而来。如何在vue项目上从后端获取数据呢？这就是我们今天要说的内容啦～ 一、前端从后端获取数据的方式通常采用http&#x2F;http">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-12-19T10:08:31.000Z">
+<meta property="article:modified_time" content="2023-04-03T04:36:32.973Z">
+<meta property="article:author" content="ljylwnxx">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+
+
+<title >Vue-axios</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.png?v=2.0.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.0.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_4020021_2ar0fw3x9h6.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"ljylwnxx","root":"/","typed_text":["今日目标,没有bug","一行代码,定义无限可能","永不脱发,无Bug"],"theme_version":"2.0.7","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/logo.png","icon32":"/img/favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":null,"visibilitychange":true,"hidden":"/failure.png","showText":"(/≧▽≦/)咦！又好啦！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"iconfont icon-sun","moon":"iconfont icon-moon","play":"iconfont icon-play","email":"iconfont icon-email","next":"iconfont icon-xiayibu_next","calendar":"iconfont icon-calendar","clock":"iconfont icon-clock","user":"iconfont icon-user","back_top":"iconfont icon-i-back-top","close":"iconfont icon-close","search":"iconfont icon-search","user_tag":"iconfont icon-user-tag","toc_tag":"iconfont icon-fenleimulu","read":"iconfont icon-read","arrows":"iconfont icon-arrows-h","double_arrows":"iconfont icon-zhankai","copy":"iconfont icon-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"covers":["/images/defaultcover.png","/images/defaultimg.png","/images/defaultimg1.png","/images/defaultimg2.png","/images/defaultimg3.png","/images/defaultimg4.png","/images/defaultimg5.png","/images/defaultimg6.png","/images/defaultimg7.png","/images/default.png"],"search":{"enable":true,"domain":null,"type":"local","preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-04-03 2023-04-03T12:36:32+08:00"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont iconfont icon-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont iconfont icon-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/logo.png">
+    
+    
+        <div class="trm-logo-text">
+            LjylWnxx
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友情链接
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/tags/" target="">
+                    标签
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/categories/" target="">
+                    分类
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			<!--  -->
+    <!-- mode switcher place -->
+    <!-- <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont iconfont icon-moon"></i>
+        </div>
+    </div> -->
+    <!-- mode switcher place end -->
+<!--  -->
+<!-- 
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+   -->
+  
+
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont iconfont icon-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            Vue-axios
+                        </h1>
+                            
+                        <!-- 
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2022
+                                    </span
+                                ></li>
+                            </ul>
+                         -->
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont iconfont icon-user-tag"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont iconfont icon-fenleimulu"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.png">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        LjylWnxx
+    </h5>
+    
+        <div class="trm-label">
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+                <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-github"></i>
+        </a>
+    
+        <a href="https://gitee.com" title="gitee" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-gitee"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+                <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                个签:
+            </div>
+            <div class="trm-label trm-label-light">
+                Hello World!
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+                
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:ljylwnxx@163.com" class="trm-btn">
+            联系我
+            <i class="iconfont iconfont icon-email"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#一、前端从后端获取数据的方式通常采用http-https的方式"  data-scroll-to="#一、前端从后端获取数据的方式通常采用http-https的方式"><span class="toc-number">1.</span> <span class="toc-text">一、前端从后端获取数据的方式通常采用http&#x2F;https的方式</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#二、从前端请求后端接口获取数据格式："  data-scroll-to="#二、从前端请求后端接口获取数据格式："><span class="toc-number">2.</span> <span class="toc-text">二、从前端请求后端接口获取数据格式：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#1、axios-get-url-config-then-res-gt-数据处理逻辑-catch-err-gt-错误处理逻辑"  data-scroll-to="#1、axios-get-url-config-then-res-gt-数据处理逻辑-catch-err-gt-错误处理逻辑"><span class="toc-number">2.1.</span> <span class="toc-text">1、axios.get(url,config).then(res&#x3D;&gt;{数据处理逻辑}).catch(err&#x3D;&gt;{错误处理逻辑})</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#2、axios-method-’get’-url-’xxxxx’-config-then-res-gt-数据处理逻辑-catch-err-gt-错误处理逻辑"  data-scroll-to="#2、axios-method-’get’-url-’xxxxx’-config-then-res-gt-数据处理逻辑-catch-err-gt-错误处理逻辑"><span class="toc-number">2.2.</span> <span class="toc-text">2、axios({method:’get’,url:’xxxxx’,config}).then(res&#x3D;&gt;{数据处理逻辑}).catch(err&#x3D;&gt;{错误处理逻辑})</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#POST方法（appcation-json或者form-data）："  data-scroll-to="#POST方法（appcation-json或者form-data）："><span class="toc-number">2.3.</span> <span class="toc-text">POST方法（appcation&#x2F;json或者form-data）：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#1、①appcation-json方式"  data-scroll-to="#1、①appcation-json方式"><span class="toc-number">2.3.1.</span> <span class="toc-text">1、①appcation&#x2F;json方式</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#②appcation-json方式："  data-scroll-to="#②appcation-json方式："><span class="toc-number">2.3.2.</span> <span class="toc-text">②appcation&#x2F;json方式：</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2、①form-data方式"  data-scroll-to="#2、①form-data方式"><span class="toc-number">2.3.3.</span> <span class="toc-text">2、①form-data方式</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#②form-data方式"  data-scroll-to="#②form-data方式"><span class="toc-number">2.3.4.</span> <span class="toc-text">②form-data方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#PUT和PATCH方式："  data-scroll-to="#PUT和PATCH方式："><span class="toc-number">2.4.</span> <span class="toc-text">PUT和PATCH方式：</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#DELETE方式："  data-scroll-to="#DELETE方式："><span class="toc-number">2.5.</span> <span class="toc-text">DELETE方式：</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#三、axios并发请求"  data-scroll-to="#三、axios并发请求"><span class="toc-number">3.</span> <span class="toc-text">三、axios并发请求</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#并发请求：同时进行多个请求，并统一处理返回值。"  data-scroll-to="#并发请求：同时进行多个请求，并统一处理返回值。"><span class="toc-number">3.1.</span> <span class="toc-text">并发请求：同时进行多个请求，并统一处理返回值。</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#axios-all-和axios-spread-方法"  data-scroll-to="#axios-all-和axios-spread-方法"><span class="toc-number">3.2.</span> <span class="toc-text">axios.all()和axios.spread()方法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#另一个axios-spread-A-B-gt"  data-scroll-to="#另一个axios-spread-A-B-gt"><span class="toc-number">3.3.</span> <span class="toc-text">另一个axios.spread((A,B)&#x3D;&gt;{})</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#四、axios实例"  data-scroll-to="#四、axios实例"><span class="toc-number">4.</span> <span class="toc-text">四、axios实例</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#五、关于请求中的config"  data-scroll-to="#五、关于请求中的config"><span class="toc-number">5.</span> <span class="toc-text">五、关于请求中的config</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#1、全局配置"  data-scroll-to="#1、全局配置"><span class="toc-number">5.1.</span> <span class="toc-text">1、全局配置</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#2、实例配置"  data-scroll-to="#2、实例配置"><span class="toc-number">5.2.</span> <span class="toc-text">2、实例配置</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#3、请求配置"  data-scroll-to="#3、请求配置"><span class="toc-number">5.3.</span> <span class="toc-text">3、请求配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#六、axios拦截器"  data-scroll-to="#六、axios拦截器"><span class="toc-number">6.</span> <span class="toc-text">六、axios拦截器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#什么是拦截器？"  data-scroll-to="#什么是拦截器？"><span class="toc-number">6.1.</span> <span class="toc-text">什么是拦截器？</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#请求拦截器"  data-scroll-to="#请求拦截器"><span class="toc-number">6.2.</span> <span class="toc-text">请求拦截器</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#响应拦截器"  data-scroll-to="#响应拦截器"><span class="toc-number">6.3.</span> <span class="toc-text">响应拦截器</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#取消拦截器"  data-scroll-to="#取消拦截器"><span class="toc-number">6.4.</span> <span class="toc-text">取消拦截器</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#七、取消请求"  data-scroll-to="#七、取消请求"><span class="toc-number">7.</span> <span class="toc-text">七、取消请求</span></a></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-calendar trm-icon"></i><br>
+            12/19
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-clock trm-icon"></i><br>
+            18:08
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-user trm-icon"></i><br>
+            ljylwnxx
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <p>众所周知，现在开发项目大多采用前后端分离的模式，个人采用vue做前端项目比较多一点。<br>说到前端，那前端肯定只是负责渲染展示数据的，那么这里有一个问题，数据从哪里来呢？<br>在开发阶段，大多会采用mock模拟数据，做一些假数据来满足暂时的需求，但是最终生产上的数据肯定是从后端接口获取而来。<br>如何在vue项目上从后端获取数据呢？这就是我们今天要说的内容啦～</p>
+<h1 id="一、前端从后端获取数据的方式通常采用http-https的方式"><a href="#一、前端从后端获取数据的方式通常采用http-https的方式" class="headerlink" title="一、前端从后端获取数据的方式通常采用http/https的方式"></a>一、前端从后端获取数据的方式通常采用http/https的方式</h1><p>方法通常有GET、POST、PUT、DELETE、PATCH这五种；<br>GET==&gt;用来获取数据，<br>POST==&gt; 是用来新增数据表单提交或文件上传<br>DELETE==&gt;是用来删除数据<br>PUT==&gt;是用来更新数据（所有数据推送到后端）<br>PATCH==&gt;是用来更新数据（只将修改的数据推送到后端）</p>
+<h1 id="二、从前端请求后端接口获取数据格式："><a href="#二、从前端请求后端接口获取数据格式：" class="headerlink" title="二、从前端请求后端接口获取数据格式："></a>二、从前端请求后端接口获取数据格式：</h1><p>GET方法：</p>
+<h2 id="1、axios-get-url-config-then-res-gt-数据处理逻辑-catch-err-gt-错误处理逻辑"><a href="#1、axios-get-url-config-then-res-gt-数据处理逻辑-catch-err-gt-错误处理逻辑" class="headerlink" title="1、axios.get(url,config).then(res=&gt;{数据处理逻辑}).catch(err=&gt;{错误处理逻辑})"></a>1、axios.get(url,config).then(res=&gt;{数据处理逻辑}).catch(err=&gt;{错误处理逻辑})</h2><h2 id="2、axios-method-’get’-url-’xxxxx’-config-then-res-gt-数据处理逻辑-catch-err-gt-错误处理逻辑"><a href="#2、axios-method-’get’-url-’xxxxx’-config-then-res-gt-数据处理逻辑-catch-err-gt-错误处理逻辑" class="headerlink" title="2、axios({method:’get’,url:’xxxxx’,config}).then(res=&gt;{数据处理逻辑}).catch(err=&gt;{错误处理逻辑})"></a>2、axios({method:’get’,url:’xxxxx’,config}).then(res=&gt;{数据处理逻辑}).catch(err=&gt;{错误处理逻辑})</h2><p>可以在config中设置基础URL，超时时间、传参方式、请求头等信息，但是传参方式一般为params，请求参数在url中。</p>
+<h2 id="POST方法（appcation-json或者form-data）："><a href="#POST方法（appcation-json或者form-data）：" class="headerlink" title="POST方法（appcation/json或者form-data）："></a>POST方法（appcation/json或者form-data）：</h2><h3 id="1、①appcation-json方式"><a href="#1、①appcation-json方式" class="headerlink" title="1、①appcation/json方式"></a>1、①appcation/json方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let data=&#123;id:12&#125;</span><br><span class="line">axios.post(url,data,config).then(res=&gt;&#123;数据处理逻辑&#125;).catch(err=&gt;&#123;错误处理逻辑&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="②appcation-json方式："><a href="#②appcation-json方式：" class="headerlink" title="②appcation/json方式："></a>②appcation/json方式：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let data=&#123;id:12&#125;</span><br><span class="line">axios(&#123;method:&#x27;post&#x27;,url,data:data,config&#125;).then(res=&gt;&#123;数据处理逻辑&#125;).catch(err=&gt;&#123;错误处理逻辑&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、①form-data方式"><a href="#2、①form-data方式" class="headerlink" title="2、①form-data方式"></a>2、①form-data方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let data=&#123;id:12&#125;</span><br><span class="line">let formData = new FormData()</span><br><span class="line">for(let key in data)&#123;</span><br><span class="line">formData.append(key,data[key])</span><br><span class="line">&#125;</span><br><span class="line">axios.post(url,formData,config).then(res=&gt;&#123;数据处理逻辑&#125;).catch(err=&gt;&#123;错误处理逻辑&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="②form-data方式"><a href="#②form-data方式" class="headerlink" title="②form-data方式"></a>②form-data方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let data=&#123;id:12&#125;</span><br><span class="line">let formData = new FormData()</span><br><span class="line">for(let key in data)&#123;</span><br><span class="line">formData.append(key,data[key])</span><br><span class="line">&#125;</span><br><span class="line">axios(&#123;method:&#x27;post&#x27;,url,formData:formData,config&#125;).then(res=&gt;&#123;数据处理逻辑&#125;).catch(err=&gt;&#123;错误处理逻辑&#125;)</span><br></pre></td></tr></table></figure>
+<p>post请求同样可以在在config中设置基础URL，超时时间、传参方式、请求头等信息，但是传参方式一般用data，参数在请求体中。</p>
+<h2 id="PUT和PATCH方式："><a href="#PUT和PATCH方式：" class="headerlink" title="PUT和PATCH方式："></a>PUT和PATCH方式：</h2><p>put和patch跟post一样，就方法不一样而已，参考post方法。</p>
+<h2 id="DELETE方式："><a href="#DELETE方式：" class="headerlink" title="DELETE方式："></a>DELETE方式：</h2><p>类似get方式，就方法不一样而已，参考get方法。<br>可以在config中设置基础URL，超时时间、传参方式、请求头等信息，<br>注意请求参数，如果在url中则config中采用params方式传参，如果在请求体中，则config中采用data方式传参。</p>
+<h1 id="三、axios并发请求"><a href="#三、axios并发请求" class="headerlink" title="三、axios并发请求"></a>三、axios并发请求</h1><h2 id="并发请求：同时进行多个请求，并统一处理返回值。"><a href="#并发请求：同时进行多个请求，并统一处理返回值。" class="headerlink" title="并发请求：同时进行多个请求，并统一处理返回值。"></a>并发请求：同时进行多个请求，并统一处理返回值。</h2><p>比如说：我们需要同时请求用户信息和商品信息，然后将获得的两种信息进行拼接等统一加工到一起。<br>这涉及到axios的两种方法：axios.all(arr[])和axios.spread()。</p>
+<h2 id="axios-all-和axios-spread-方法"><a href="#axios-all-和axios-spread-方法" class="headerlink" title="axios.all()和axios.spread()方法"></a>axios.all()和axios.spread()方法</h2><p>其中axios.all(arr[])这个方法的作用就是同时去请求，它的参数是数组，数组的内容就是请求方式和路径。<br>比如：arr[] =[axios.get(url),axios.post(url,data,config)]</p>
+<h2 id="另一个axios-spread-A-B-gt"><a href="#另一个axios-spread-A-B-gt" class="headerlink" title="另一个axios.spread((A,B)=&gt;{})"></a>另一个axios.spread((A,B)=&gt;{})</h2><p>这个方法是用来处理返回的数据的，其中{}中是具体的处理逻辑，A就是第一个请求的返回值，B就是第二个请求的返回值。<br>具体用法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">axios.all([axios.get(url),axios.post(url,data,config)]).then(axios.spread((A,B)=&gt;&#123;&#125;))</span><br></pre></td></tr></table></figure>
+<h1 id="四、axios实例"><a href="#四、axios实例" class="headerlink" title="四、axios实例"></a>四、axios实例</h1><p>你会不会有这样一个疑问，就是为什么要用axios实例呢？<br>那可能是因为在你的项目中会涉及到多个接口地址，而且每种接口的超时时间等等设置都不一样，<br>那么这个时候，你就可以针对某个接口地址某种超时时间来创建独立的axios实例，后期你就可以直接使用这种特殊axios实例去进行数据请求了。<br>具体用法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let instance = axios.create(config);</span><br><span class="line">instance.get(url).then(res=&gt;&#123;数据处理逻辑&#125;).catch(err=&gt;&#123;错误处理逻辑&#125;)</span><br></pre></td></tr></table></figure>
+<h1 id="五、关于请求中的config"><a href="#五、关于请求中的config" class="headerlink" title="五、关于请求中的config"></a>五、关于请求中的config</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">config的格式为：</span><br><span class="line">&#123;</span><br><span class="line">baseURL:&#x27;http:/xxxxxx&#x27;, //基础url</span><br><span class="line">timeout:6000, //超时时间</span><br><span class="line">url:xxxxxx, //具体url</span><br><span class="line">method:&#x27;get/post/put/patch/delete&#x27;, //请求方式</span><br><span class="line">headers:&#123;token:&#x27;xxxxx&#x27;等&#125;, //请求头设置</span><br><span class="line">params:&#123;&#125;, //请求参数对象，它会将请求参数拼接到url上</span><br><span class="line">data:&#123;&#125; //请求参数对象，它会将请求参数放到请求体中</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>config应用场景</p>
+<h2 id="1、全局配置"><a href="#1、全局配置" class="headerlink" title="1、全局配置"></a>1、全局配置</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">axios.defaults.timeout = 1000</span><br><span class="line">axios.defaults.baseURL = &#x27;http://XXXXX&#x27;</span><br></pre></td></tr></table></figure>
+<h2 id="2、实例配置"><a href="#2、实例配置" class="headerlink" title="2、实例配置"></a>2、实例配置</h2><p>在axios创建实例中配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let instance = axios.create();</span><br><span class="line">instance.defaults.timeout = 1000</span><br></pre></td></tr></table></figure>
+<h2 id="3、请求配置"><a href="#3、请求配置" class="headerlink" title="3、请求配置"></a>3、请求配置</h2><p>在请求中配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">axios.get(url,config).then(res=&gt;&#123;数据处理逻辑&#125;).catch(err=&gt;&#123;错误处理逻辑&#125;)</span><br></pre></td></tr></table></figure>
+<p>其中，配置优先级为：3&gt;2&gt;1</p>
+<h1 id="六、axios拦截器"><a href="#六、axios拦截器" class="headerlink" title="六、axios拦截器"></a>六、axios拦截器</h1><h2 id="什么是拦截器？"><a href="#什么是拦截器？" class="headerlink" title="什么是拦截器？"></a>什么是拦截器？</h2><p>拦截器就是在请求之前和响应之后能进行一些额外操作的功能实现。<br>一般分为请求拦截器和响应拦截器两种。</p>
+<h2 id="请求拦截器"><a href="#请求拦截器" class="headerlink" title="请求拦截器"></a>请求拦截器</h2><p>请求拦截器顾名思义就是在请求之前进行拦截并进行一些额外操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">service.interceptors.request.use(</span><br><span class="line">config =&gt; &#123;</span><br><span class="line">//在发送请求前的额外处理</span><br><span class="line">return config</span><br><span class="line">&#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="响应拦截器"><a href="#响应拦截器" class="headerlink" title="响应拦截器"></a>响应拦截器</h2><p>响应拦截器顾名思义就是在响应之后进行拦截并进行一些额外操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">service.interceptors.response.use(</span><br><span class="line">res =&gt; &#123;</span><br><span class="line">//响应之后做一些额外操作</span><br><span class="line">return res</span><br><span class="line">&#125;,</span><br><span class="line">error =&gt; &#123;</span><br><span class="line">//在发生错误后的额外处理</span><br><span class="line">return Promise.reject(error)</span><br><span class="line">&#125;</span><br><span class="line">)</span><br><span class="line">注意：不管是请求拦截器还是响应拦截器，在发生错误后都会进入到请求的catch方法中，如：</span><br><span class="line">axios.get(url,config).then(res=&gt;&#123;数据处理逻辑&#125;).catch(err=&gt;&#123;错误处理逻辑&#125;)</span><br></pre></td></tr></table></figure>
+<p>例子：发送请求前，在请求头中添加token，就可以用拦截器来实现</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let instance = axios.create(config);</span><br><span class="line">instance.interceptors.request.use(confit=&gt;&#123;</span><br><span class="line">config.headers.token=&quot;sssssss&quot;</span><br><span class="line">return config</span><br><span class="line">&#125;,</span><br><span class="line">error =&gt; &#123;</span><br><span class="line">//在发生错误后的额外处理</span><br><span class="line">return Promise.reject(error)</span><br><span class="line">&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="取消拦截器"><a href="#取消拦截器" class="headerlink" title="取消拦截器"></a>取消拦截器</h2><p>顾名思义就是取消掉已经配置的拦截器</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let instance = axios.create(config);</span><br><span class="line">instance.interceptors.request.use(</span><br><span class="line">config=&gt;&#123;</span><br><span class="line">config.headers.token=&quot;sssssss&quot;</span><br><span class="line">return config</span><br><span class="line">&#125;,</span><br><span class="line">error =&gt; &#123;</span><br><span class="line">//在发生错误后的额外处理</span><br><span class="line">return Promise.reject(error)</span><br><span class="line">&#125;</span><br><span class="line">)</span><br><span class="line">//取消拦截器操作：</span><br><span class="line">axios.interceptors.request.eject(instance)</span><br></pre></td></tr></table></figure>
+<h1 id="七、取消请求"><a href="#七、取消请求" class="headerlink" title="七、取消请求"></a>七、取消请求</h1><p>取消请求实际中用的到不多，主要使用场景比如：用户正在批量查询一个比较耗时的数据，发起请求后用户不想查了，<br>这时候就可以取消这个请求,主要用到：axios.CancelToken.source()方法<br>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">axios.CancelToken.source()</span><br><span class="line">axios.get(url,&#123;CancelToken:source,token&#125;).then(res=&gt;&#123;数据处理逻辑&#125;).catch(err=&gt;&#123;错误处理逻辑&#125;)</span><br><span class="line">//触发取消请求：</span><br><span class="line">source.cancel(&#x27;错误信息&#x27;)</span><br></pre></td></tr></table></figure>
+<p>就可以了</p>
+
+</article>
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/01/10/vue3%E6%96%B0%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <div class="trm-cover-img" data-random-img></div>
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/vue3/">
+                    vue3
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/01/10/vue3%E6%96%B0%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82/" class="trm-anima-link">
+                    vue3新语法细节
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/01/10</li>
+                <li>18:40</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2022/12/13/vue3API/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <div class="trm-cover-img" data-random-img></div>
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/vue3/">
+                    vue3
+                </a>
+            </div>
+            <h5>
+                <a href="/2022/12/13/vue3API/" class="trm-anima-link">
+                    vue3API
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>22/12/13</li>
+                <li>21:10</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2023</span>
+            <span class="footer-separator"data-separator=" | "></span>
+            <span class="trm-accent-color">LjylWnxx</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            博客已运行 <span id="since" class="trm-accent-color"></span> 天
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        var BirthDay = new Date("08/16/2022 21:45:54");
+        var today = new Date();
+        var timeold = (today.getTime() - BirthDay.getTime());
+        var msPerDay = 24 * 60 * 60 * 1000
+        var day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont iconfont icon-read"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont iconfont icon-arrows-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont iconfont icon-i-back-top"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont iconfont icon-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont iconfont icon-close"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.0.7"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.0.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.7"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="简述classNames 是一个 JavaScript 库,用于动态生成 CSS 类名，根据不同的条件添加或移除 CSS 类名。简单来说就是动态地去操作类名，把符合条件的类名粘在一起，简化在 React 组件中处理类名的复杂逻辑。 安装（使用 npm）npm install classnames  引入在 nodejs 里引入var classNames &#x3D; require(&amp;#x27;class">
+<meta property="og:type" content="article">
+<meta property="og:title" content="classNames库">
+<meta property="og:url" content="http://example.com/2023/12/18/classNames%E5%BA%93/index.html">
+<meta property="og:site_name" content="ljylwnxx的博客">
+<meta property="og:description" content="简述classNames 是一个 JavaScript 库,用于动态生成 CSS 类名，根据不同的条件添加或移除 CSS 类名。简单来说就是动态地去操作类名，把符合条件的类名粘在一起，简化在 React 组件中处理类名的复杂逻辑。 安装（使用 npm）npm install classnames  引入在 nodejs 里引入var classNames &#x3D; require(&amp;#x27;class">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-18T13:45:38.000Z">
+<meta property="article:modified_time" content="2023-12-26T08:55:31.517Z">
+<meta property="article:author" content="ljylwnxx">
+<meta property="article:tag" content="classNames库">
+<meta name="twitter:card" content="summary">
+
+
+<title >classNames库</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.png?v=2.0.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.0.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_4020021_2ar0fw3x9h6.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"ljylwnxx","root":"/","typed_text":["今日目标,没有bug","一行代码,定义无限可能","永不脱发,无Bug"],"theme_version":"2.0.7","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/logo.png","icon32":"/img/favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":null,"visibilitychange":true,"hidden":"/failure.png","showText":"(/≧▽≦/)咦！又好啦！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"iconfont icon-sun","moon":"iconfont icon-moon","play":"iconfont icon-play","email":"iconfont icon-email","next":"iconfont icon-xiayibu_next","calendar":"iconfont icon-calendar","clock":"iconfont icon-clock","user":"iconfont icon-user","back_top":"iconfont icon-i-back-top","close":"iconfont icon-close","search":"iconfont icon-search","user_tag":"iconfont icon-user-tag","toc_tag":"iconfont icon-fenleimulu","read":"iconfont icon-read","arrows":"iconfont icon-arrows-h","double_arrows":"iconfont icon-zhankai","copy":"iconfont icon-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"covers":["/images/defaultcover.png","/images/defaultimg.png","/images/defaultimg1.png","/images/defaultimg2.png","/images/defaultimg3.png","/images/defaultimg4.png","/images/defaultimg5.png","/images/defaultimg6.png","/images/defaultimg7.png","/images/default.png"],"search":{"enable":true,"domain":null,"type":"local","preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-12-26 2023-12-26T16:55:31+08:00"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont iconfont icon-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont iconfont icon-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/logo.png">
+    
+    
+        <div class="trm-logo-text">
+            LjylWnxx
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友情链接
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/tags/" target="">
+                    标签
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/categories/" target="">
+                    分类
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			<!--  -->
+    <!-- mode switcher place -->
+    <!-- <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont iconfont icon-moon"></i>
+        </div>
+    </div> -->
+    <!-- mode switcher place end -->
+<!--  -->
+<!-- 
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+   -->
+  
+
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont iconfont icon-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            classNames库
+                        </h1>
+                            
+                        <!-- 
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                         -->
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont iconfont icon-user-tag"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont iconfont icon-fenleimulu"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.png">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        LjylWnxx
+    </h5>
+    
+        <div class="trm-label">
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+                <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-github"></i>
+        </a>
+    
+        <a href="https://gitee.com" title="gitee" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-gitee"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+                <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                个签:
+            </div>
+            <div class="trm-label trm-label-light">
+                Hello World!
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+                
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:ljylwnxx@163.com" class="trm-btn">
+            联系我
+            <i class="iconfont iconfont icon-email"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#简述"  data-scroll-to="#简述"><span class="toc-number">1.</span> <span class="toc-text">简述</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#安装（使用-npm）"  data-scroll-to="#安装（使用-npm）"><span class="toc-number">2.</span> <span class="toc-text">安装（使用 npm）</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#引入"  data-scroll-to="#引入"><span class="toc-number">3.</span> <span class="toc-text">引入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#在-nodejs-里引入"  data-scroll-to="#在-nodejs-里引入"><span class="toc-number">3.1.</span> <span class="toc-text">在 nodejs 里引入</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#在-js-里引入"  data-scroll-to="#在-js-里引入"><span class="toc-number">3.2.</span> <span class="toc-text">在 js 里引入</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#基本使用"  data-scroll-to="#基本使用"><span class="toc-number">4.</span> <span class="toc-text">基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#普通字符串粘合"  data-scroll-to="#普通字符串粘合"><span class="toc-number">4.1.</span> <span class="toc-text">普通字符串粘合</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#带条件的类参数"  data-scroll-to="#带条件的类参数"><span class="toc-number">4.2.</span> <span class="toc-text">带条件的类参数</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#参数类型是数组"  data-scroll-to="#参数类型是数组"><span class="toc-number">4.3.</span> <span class="toc-text">参数类型是数组</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#特别注意"  data-scroll-to="#特别注意"><span class="toc-number">4.4.</span> <span class="toc-text">特别注意</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#在-React-中优雅地使用-classnames"  data-scroll-to="#在-React-中优雅地使用-classnames"><span class="toc-number">5.</span> <span class="toc-text">在 React 中优雅地使用 classnames</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#原理"  data-scroll-to="#原理"><span class="toc-number">6.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#classNames-源码"  data-scroll-to="#classNames-源码"><span class="toc-number">6.1.</span> <span class="toc-text">classNames 源码</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#源码分析"  data-scroll-to="#源码分析"><span class="toc-number">6.2.</span> <span class="toc-text">源码分析</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#疑问"  data-scroll-to="#疑问"><span class="toc-number">6.3.</span> <span class="toc-text">疑问</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#使用示例"  data-scroll-to="#使用示例"><span class="toc-number">6.4.</span> <span class="toc-text">使用示例</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-calendar trm-icon"></i><br>
+            12/18
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-clock trm-icon"></i><br>
+            21:45
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-user trm-icon"></i><br>
+            ljylwnxx
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>classNames 是一个 JavaScript 库,用于动态生成 CSS 类名，根据不同的条件添加或移除 CSS 类名。简单来说就是动态地去操作类名，把符合条件的类名粘在一起，简化在 React 组件中处理类名的复杂逻辑。</p>
+<h1 id="安装（使用-npm）"><a href="#安装（使用-npm）" class="headerlink" title="安装（使用 npm）"></a>安装（使用 npm）</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install classnames</span><br></pre></td></tr></table></figure>
+
+<h1 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h1><h2 id="在-nodejs-里引入"><a href="#在-nodejs-里引入" class="headerlink" title="在 nodejs 里引入"></a>在 nodejs 里引入</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var classNames = require(&#x27;classnames&#x27;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="在-js-里引入"><a href="#在-js-里引入" class="headerlink" title="在 js 里引入"></a>在 js 里引入</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import classnames from &#x27;classnames&#x27;</span><br></pre></td></tr></table></figure>
+
+<h1 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h1><p>classNames 函数接受任意数量的参数，可以是 string、boolean、number、array 等。</p>
+<h2 id="普通字符串粘合"><a href="#普通字符串粘合" class="headerlink" title="普通字符串粘合"></a>普通字符串粘合</h2><p>将参数拼接为字符串，中间用空格分开</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classNames(&#x27;foo&#x27;, &#x27;bar&#x27;) // =&gt; &#x27;foo bar&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="带条件的类参数"><a href="#带条件的类参数" class="headerlink" title="带条件的类参数"></a>带条件的类参数</h2><p>这里第二个参数是对象类型，键值为 true，则粘合进 className 里</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classNames(&#x27;foo&#x27;, &#123; bar: true &#125;) // =&gt; &#x27;foo bar&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>若为 false，则不粘进去</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classNames(&#x27;foo&#x27;, &#123; bar: false &#125;) // =&gt; &#x27;foo&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参数类型是数组"><a href="#参数类型是数组" class="headerlink" title="参数类型是数组"></a>参数类型是数组</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [&#x27;b&#x27;, &#123; c: true, d: false &#125;]</span><br><span class="line">classNames(&#x27;a&#x27;, arr) // =&gt; &#x27;a b c&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="特别注意"><a href="#特别注意" class="headerlink" title="特别注意"></a>特别注意</h2><p>null 和 undefiend 会被忽略</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">classNames(null, false, &#x27;bar&#x27;, undefined, 0, 1, &#123; baz: null &#125;, &#x27;&#x27;) // =&gt; &#x27;bar 1&#x27;</span><br></pre></td></tr></table></figure>
+
+<h1 id="在-React-中优雅地使用-classnames"><a href="#在-React-中优雅地使用-classnames" class="headerlink" title="在 React 中优雅地使用 classnames"></a>在 React 中优雅地使用 classnames</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import classnames from &#x27;classnames&#x27;</span><br><span class="line"></span><br><span class="line">const Button = (&#123;primary,size&#125;)=&gt;&#123;</span><br><span class="line">  const classes = classnames(&#x27;btn&#x27;, &#123;</span><br><span class="line">    &#x27;btn-primary&#x27;:primary,</span><br><span class="line">    &#x27;btn-large&#x27;: size===&#x27;large&#x27;,</span><br><span class="line">    &#x27;btn-small&#x27;: size===&#x27;small&#x27;</span><br><span class="line">  &#125;)</span><br><span class="line">  return &lt;button className= &#123;classes&#125;&gt;点击按钮&lt;/button&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，classnames 函数接受一个类名和一个将类名映射为布尔值的对象。<br>classes 就可以变成一个对象，通过键值的条件确定最终生成的 className。</p>
+<ul>
+<li>如果给定类名的布尔值为 true，则该类名将包含在类名的最终列表中。</li>
+<li>如果给定类名的布尔值为 false，则不包括类名。<br>另外可以将字符串作为第二个参数传递给类名，如果给定类名的布尔值为 true，那么它将被添加到类名的最终列表中。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const classes = classnames(&#x27;btn&#x27;, primary &amp;&amp; &#x27;btn-primary&#x27;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="classNames-源码"><a href="#classNames-源码" class="headerlink" title="classNames 源码"></a>classNames 源码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(function () &#123;</span><br><span class="line">	&#x27;use strict&#x27;</span><br><span class="line">  //hasOwnProperty这个方法用来判断对象的属性是否属于自己本身——而不是往原型链上面找到的</span><br><span class="line">	var hasOwn = &#123;&#125;.hasOwnProperty</span><br><span class="line"></span><br><span class="line">	function classNames () &#123;</span><br><span class="line">    //用于存储生成的类名</span><br><span class="line">		var classes = &#x27;&#x27;</span><br><span class="line">    //遍历classnames的所有参数</span><br><span class="line">		for (var i = 0; i &lt; arguments.length; i++) &#123;</span><br><span class="line">      //遍历 arguments 拿到每一项</span><br><span class="line">			var arg = arguments[i]</span><br><span class="line">			if (arg) &#123;</span><br><span class="line">				classes = appendClass(classes, parseValue(arg))</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		return classes</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	function parseValue (arg) &#123;</span><br><span class="line">    //获取每一个参数的类型</span><br><span class="line">    //如果是字符串或数字就直接加到classes数组里</span><br><span class="line">		if (typeof arg === &#x27;string&#x27; || typeof arg === &#x27;number&#x27;) &#123;</span><br><span class="line">			return arg</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		if (typeof arg !== &#x27;object&#x27;) &#123;</span><br><span class="line">			return &#x27;&#x27;</span><br><span class="line">		&#125;</span><br><span class="line">    //如果参数是数组，则将数组的值当作参数，调用自己</span><br><span class="line">		if (Array.isArray(arg)) &#123;</span><br><span class="line">			return classNames.apply(null, arg)</span><br><span class="line">		&#125;</span><br><span class="line">    //如果是对象且有自定义的toString方法，则调用toString方法添加到classes对象里</span><br><span class="line">		if (arg.toString !== Object.prototype.toString &amp;&amp; !arg.toString.toString().includes(&#x27;[native code]&#x27;)) &#123;</span><br><span class="line">			return arg.toString()</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		var classes = &#x27;&#x27;</span><br><span class="line">    //对于普通对象类型，则遍历对象的每一组键值对</span><br><span class="line">		for (var key in arg) &#123;</span><br><span class="line">      //将值为true的键作为className插入classes数组里</span><br><span class="line">			if (hasOwn.call(arg, key) &amp;&amp; arg[key]) &#123;</span><br><span class="line">				classes = appendClass(classes, key)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		return classes</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	function appendClass (value, newClass) &#123;</span><br><span class="line">		if (!newClass) &#123;</span><br><span class="line">			return value</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		if (value) &#123;</span><br><span class="line">			return value + &#x27; &#x27; + newClass</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		return value + newClass</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	if (typeof module !== &#x27;undefined&#x27; &amp;&amp; module.exports) &#123;</span><br><span class="line">		classNames.default = classNames</span><br><span class="line">		module.exports = classNames</span><br><span class="line">	&#125; else if (typeof define === &#x27;function&#x27; &amp;&amp; typeof define.amd === &#x27;object&#x27; &amp;&amp; define.amd) &#123;</span><br><span class="line">		// register as &#x27;classnames&#x27;, consistent with npm package name</span><br><span class="line">		define(&#x27;classnames&#x27;, [], function () &#123;</span><br><span class="line">			return classNames</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		window.classNames = classNames</span><br><span class="line">	&#125;</span><br><span class="line">&#125;())</span><br></pre></td></tr></table></figure>
+
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>首先分析 index.js，采用了自执行的函数，避免变量污染冲突，采用严格模式。</p>
+<ol>
+<li>函数声明了一个名为 classes 的空数组，该数组将用于存储生成的类名。</li>
+<li>然后，for 循环函数自带 arguments 实例，得到 classnames 函数的所有实参。<br>对于每个参数，执行以下步骤:</li>
+</ol>
+<ul>
+<li>检查参数的类型。<ul>
+<li>如果参数是一个字符串或数字，添加到类数组。</li>
+<li>如果参数是数组，则函数检查它是否为非空。如果是，则函数以数组元素作为参数递归地调用自身，并将结果添加到类数组中。</li>
+<li>如果参数是一个对象，那么先判定它的 toString 方法是否重写了。<ul>
+<li>如果是重写了，直接将调用 toString 的结果添加到类数组中。</li>
+<li>如果不是，函数将遍历对象自己的可枚举属性，并将属性名称添加到类数组中(如果它们的对应值为真)。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li>提供了三种导出 classNames 的方式。</li>
+</ol>
+<ul>
+<li>module.exports 导出 classNames</li>
+<li>直接返回 classNames</li>
+<li>将 classNames 挂载到 window 上</li>
+</ul>
+<ol start="4">
+<li>循环结束后，将类数组合并到一个单独的字符串中，并返回结果字符串。</li>
+</ol>
+<h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><ol>
+<li>arg.toString !== Object.prototype.toString 是什么？</li>
+</ol>
+<p>首先所有 js 对象都继承 Object 对象，都继承 toString 方法，这个表达式就是这个对象的 toString 方法不是继承自 Object.prototype</p>
+<ol start="2">
+<li>arg.toString.toString().includes(“[native code]”) 是什么意思？</li>
+</ol>
+<p>首先要知道 toString 方法的一些知识：</p>
+<ul>
+<li>如果对一个自定义函数调用 toString()方法时，可以得到该函数的源代码。</li>
+<li>如果对内置函数调用 toString()方法时，会得到一个’[native code]’字符串。<br>因此，可以使用 toString()方法来区分自定义函数和内置函数。<br>注意：上诉表达式中是对函数调用 toString()方法。<br>通过对 toString 函数调用 toString 方法，就可以判断这个 toString 是内置的，还是自定义的。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">arg.toString !== Object.prototype.toString &amp;&amp; !arg.toString.toString().includes(&#x27;[native code])</span><br></pre></td></tr></table></figure>
+
+<p>这里两个表达式连起来的意思就是：现在这个类有 toString 方法，而且还是自定义的</p>
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><p>从源码来看，classNames 能够接入的参数是多种多样的，下面列举一些。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//字符串(能够单个，多个字符串)</span><br><span class="line">classNames(&#x27;el-checkbox-button--m&#x27;, &quot;is-disabled&quot;)</span><br><span class="line"></span><br><span class="line">//对象(能够单个，多个)</span><br><span class="line">classNames(&#123;&quot;is-disabled&quot;：true&#125;, &#123;&#x27;is-disabled&#x27;: disabled&#125;)</span><br><span class="line"></span><br><span class="line">//字符串+对象</span><br><span class="line">classNames(&#x27;el-checkbox-button--m&#x27;, &#123;&quot;is-disabled&quot;：true, &#x27;is-disabled&#x27;: disabled&#125;)</span><br><span class="line"></span><br><span class="line">//数组（数组项能够是字符串，对象）</span><br><span class="line">classNames([&#x27;el-checkbox-button--m&#x27;, &quot;is-disabled&quot;])</span><br><span class="line">classNames([&#x27;el-checkbox-button--m&#x27;, &#123;&quot;is-disabled&quot;：true，&#x27;is-disabled&#x27;: disabled&#125;])</span><br></pre></td></tr></table></figure>
+
+</article>
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/09/21/Vue%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <div class="trm-cover-img" data-random-img></div>
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/vue/">
+                    vue
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/09/21/Vue%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6/" class="trm-anima-link">
+                    Vue更新机制
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/09/21</li>
+                <li>21:34</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2023</span>
+            <span class="footer-separator"data-separator=" | "></span>
+            <span class="trm-accent-color">LjylWnxx</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            博客已运行 <span id="since" class="trm-accent-color"></span> 天
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        var BirthDay = new Date("08/16/2022 21:45:54");
+        var today = new Date();
+        var timeold = (today.getTime() - BirthDay.getTime());
+        var msPerDay = 24 * 60 * 60 * 1000
+        var day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont iconfont icon-read"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont iconfont icon-arrows-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont iconfont icon-i-back-top"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont iconfont icon-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont iconfont icon-close"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.0.7"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.0.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.7"></script>
+
+</body>
+
+</html>

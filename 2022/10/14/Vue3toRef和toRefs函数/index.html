@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="toRef 函数我们知道，ref 函数可以创建一个响应式的数据，那 toRef 函数同样也是创建一个响应式的数据，那么它们之间的区别是什么呢？ 首先一点，ref 函数他的本质其实是去拷贝一份数据，脱离了与源数据的交互。什么意思呢？就是 ref 函数可以将对象里面的属性值变成响应式的数据，修改响应式数据，是不会影响到源数据，但是视图层上的数据会被更新。但是 toRefs 函数的本质是引用，也就是说，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue3toRef和toRefs函数">
+<meta property="og:url" content="http://example.com/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="ljylwnxx的博客">
+<meta property="og:description" content="toRef 函数我们知道，ref 函数可以创建一个响应式的数据，那 toRef 函数同样也是创建一个响应式的数据，那么它们之间的区别是什么呢？ 首先一点，ref 函数他的本质其实是去拷贝一份数据，脱离了与源数据的交互。什么意思呢？就是 ref 函数可以将对象里面的属性值变成响应式的数据，修改响应式数据，是不会影响到源数据，但是视图层上的数据会被更新。但是 toRefs 函数的本质是引用，也就是说，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="article:published_time" content="2022-10-14T13:48:21.000Z">
+<meta property="article:modified_time" content="2023-03-22T06:29:13.317Z">
+<meta property="article:author" content="ljylwnxx">
+<meta property="article:tag" content="vue3">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/404.jpg">
+
+
+<title >Vue3toRef和toRefs函数</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.png?v=2.0.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.0.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_4020021_2ar0fw3x9h6.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"ljylwnxx","root":"/","typed_text":["今日目标,没有bug","一行代码,定义无限可能","永不脱发,无Bug"],"theme_version":"2.0.7","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/logo.png","icon32":"/img/favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":null,"visibilitychange":true,"hidden":"/failure.png","showText":"(/≧▽≦/)咦！又好啦！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"iconfont icon-sun","moon":"iconfont icon-moon","play":"iconfont icon-play","email":"iconfont icon-email","next":"iconfont icon-xiayibu_next","calendar":"iconfont icon-calendar","clock":"iconfont icon-clock","user":"iconfont icon-user","back_top":"iconfont icon-i-back-top","close":"iconfont icon-close","search":"iconfont icon-search","user_tag":"iconfont icon-user-tag","toc_tag":"iconfont icon-fenleimulu","read":"iconfont icon-read","arrows":"iconfont icon-arrows-h","double_arrows":"iconfont icon-zhankai","copy":"iconfont icon-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"covers":["/images/defaultcover.png","/images/defaultimg.png","/images/defaultimg1.png","/images/defaultimg2.png","/images/defaultimg3.png","/images/defaultimg4.png","/images/defaultimg5.png","/images/defaultimg6.png","/images/defaultimg7.png","/images/default.png"],"search":{"enable":true,"domain":null,"type":"local","preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-03-22 2023-03-22T14:29:13+08:00"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont iconfont icon-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont iconfont icon-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/logo.png">
+    
+    
+        <div class="trm-logo-text">
+            LjylWnxx
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友情链接
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/tags/" target="">
+                    标签
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/categories/" target="">
+                    分类
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			<!--  -->
+    <!-- mode switcher place -->
+    <!-- <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont iconfont icon-moon"></i>
+        </div>
+    </div> -->
+    <!-- mode switcher place end -->
+<!--  -->
+<!-- 
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+   -->
+  
+
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont iconfont icon-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            Vue3toRef和toRefs函数
+                        </h1>
+                            
+                        <!-- 
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2022
+                                    </span
+                                ></li>
+                            </ul>
+                         -->
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont iconfont icon-user-tag"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont iconfont icon-fenleimulu"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.png">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        LjylWnxx
+    </h5>
+    
+        <div class="trm-label">
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+                <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-github"></i>
+        </a>
+    
+        <a href="https://gitee.com" title="gitee" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-gitee"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+                <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                个签:
+            </div>
+            <div class="trm-label trm-label-light">
+                Hello World!
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+                
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:ljylwnxx@163.com" class="trm-btn">
+            联系我
+            <i class="iconfont iconfont icon-email"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#toRef-函数"  data-scroll-to="#toRef-函数"><span class="toc-number">1.</span> <span class="toc-text">toRef 函数</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#toRef-函数使用"  data-scroll-to="#toRef-函数使用"><span class="toc-number">2.</span> <span class="toc-text">toRef 函数使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#首先呢，-toRef-函数有两个参数"  data-scroll-to="#首先呢，-toRef-函数有两个参数"><span class="toc-number">2.1.</span> <span class="toc-text">首先呢， toRef 函数有两个参数</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#接下来我们使用-toRef-函数写一个案例"  data-scroll-to="#接下来我们使用-toRef-函数写一个案例"><span class="toc-number">2.2.</span> <span class="toc-text">接下来我们使用 toRef 函数写一个案例</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#ref-函数验证"  data-scroll-to="#ref-函数验证"><span class="toc-number">3.</span> <span class="toc-text">ref 函数验证</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#toRefs-函数"  data-scroll-to="#toRefs-函数"><span class="toc-number">4.</span> <span class="toc-text">toRefs 函数</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#toRefs-函数使用"  data-scroll-to="#toRefs-函数使用"><span class="toc-number">5.</span> <span class="toc-text">toRefs 函数使用</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#总结"  data-scroll-to="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-calendar trm-icon"></i><br>
+            10/14
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-clock trm-icon"></i><br>
+            21:48
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-user trm-icon"></i><br>
+            ljylwnxx
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="toRef-函数"><a href="#toRef-函数" class="headerlink" title="toRef 函数"></a>toRef 函数</h1><p>我们知道，ref 函数可以创建一个响应式的数据，那 toRef 函数同样也是创建一个响应式的数据，那么它们之间的区别是什么呢？</p>
+<p>首先一点，ref 函数他的本质其实是去拷贝一份数据，脱离了与源数据的交互。<br>什么意思呢？就是 ref 函数可以将对象里面的属性值变成响应式的数据，修改响应式数据，是不会影响到源数据，但是视图层上的数据会被更新。<br>但是 toRefs 函数的本质是引用，也就是说，toRef 函数会与源数据交互，修改响应式数据会造成源数据的修改，但是他的修改不会造成视图层数据的更新。</p>
+<h1 id="toRef-函数使用"><a href="#toRef-函数使用" class="headerlink" title="toRef 函数使用"></a>toRef 函数使用</h1><h2 id="首先呢，-toRef-函数有两个参数"><a href="#首先呢，-toRef-函数有两个参数" class="headerlink" title="首先呢， toRef 函数有两个参数"></a>首先呢， toRef 函数有两个参数</h2><p>toRef(操作对象, 对象属性)</p>
+<h2 id="接下来我们使用-toRef-函数写一个案例"><a href="#接下来我们使用-toRef-函数写一个案例" class="headerlink" title="接下来我们使用 toRef 函数写一个案例"></a>接下来我们使用 toRef 函数写一个案例</h2><p><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/toref%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/toref%E9%A1%B5%E9%9D%A2%E6%88%90%E5%8A%9F.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>我们可以看到数据的结构，在 value 里面直接就是 boy 下面 name 的属性值，所以说，接下来我们编写一个按钮，点击按钮，修改这个 name 值。<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/toref%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>然后点击按钮看一下页面效果<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/toref%E4%BF%AE%E6%94%B9%E7%BB%93%E6%9E%9C.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>通过截图展示的效果我们可以发现，boy_toRef 的值确实被修改了，但是呢，页面并没有改变，而且页面也没有出现错误。<br>这是什么原因呢？其实这不是 Bug 哈，在本篇博文开始就说过，toRef 函数会与源数据交互，修改响应式数据会造成源数据的修改，但是他的修改不会造成视图层数据的更新，所以说，这就是 toRef 函数的功能。确实，视图没有数据更新我们通过上面的截图看到了，但是源数据修改这个怎么看呢？没关系，在回答这个问题之前，我们首先得知道，什么是源数据。<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/toref%E6%BA%90%E6%95%B0%E6%8D%AE.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>toRef 函数将 boy 对象给包裹了起来，所以说，boy 对象就是源数据。<br>所以说，想知道源数据有没有改变，在点击按钮之后，打印一下 boy 对象，看一下 boy 有没有被改变。<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/toref%E6%89%93%E5%8D%B0body%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>刷新页面，在点击按钮修改 name 值，然后查看一下控制台打印的 boy 对象<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/torefbody%E6%89%93%E5%8D%B0%E7%BB%93%E6%9E%9C.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>发现 boy 对象的 name 值已经从 我是wn. 改为 wn.了，但是页面依旧没有更新。<br>记住了！<br>toRef 函数会与源数据交互，修改响应式数据会造成源数据的修改，但是他的修改不会造成视图层数据的更新。</p>
+<h1 id="ref-函数验证"><a href="#ref-函数验证" class="headerlink" title="ref 函数验证"></a>ref 函数验证</h1><p>那 ref 函数可以将对象里面的属性值变成响应式的数据，修改响应式数据，是不会影响到源数据，但是视图层上的数据会被更新,我们测试一下<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/ref%E5%87%BD%E6%95%B0%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>刷新页面，点击按钮查看页面控制台打印的结果，主要是看一下被 ref 函数包裹后的数据有没有修改成功，源数据有没有修改成功，最后页面有没有修改，下面看截图<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/ref%E5%87%BD%E6%95%B0%E9%AA%8C%E8%AF%81%E7%BB%93%E6%9E%9C.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>所以再记住！<br>ref 函数可以将对象里面的属性值变成响应式的数据，修改响应式数据，是不会影响到源数据，但是视图层上的数据会被更新</p>
+<h1 id="toRefs-函数"><a href="#toRefs-函数" class="headerlink" title="toRefs 函数"></a>toRefs 函数</h1><p>toRefs 函数的使用呢，其实和 toRef 函数类似。<br>toRefs 函数用于批量设置多个数据为响应式数据。<br>toRefs 函数与原始数据相交互，修改响应式数据会影响到源数据，但是不会更新视图层。<br>toRefs 函数还可以与其他响应式数据相交互，更加方便处理视图层数据。</p>
+<h1 id="toRefs-函数使用"><a href="#toRefs-函数使用" class="headerlink" title="toRefs 函数使用"></a>toRefs 函数使用</h1><p><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/refs%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/refs%E4%BD%BF%E7%94%A8%E7%BB%93%E6%9E%9C.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/refs%E4%BD%BF%E7%94%A8%E6%8E%A7%E5%88%B6%E5%8F%B0%E4%BF%A1%E6%81%AF.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>修改一下代码，在渲染的时候除了 .属性 之外，还需要 .value<br><img src="/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>查看效果<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/refs%E4%BD%BF%E7%94%A8%E6%AD%A3%E5%B8%B8.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>现在可以看到数据显示正常啦！<br>这时可能会有人有疑问，那这不是越来越复杂了吗？本来直接点属性就可以，现在还得点属性点value，不是多此一举吗？<br>这种复杂结构数据我们完全可以使用 reactive 函数来处理呀，渲染最多点一次就可以，但是 toRefs 函数却需要点两次。<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/reactive%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>我们不使用 toRefs 函数，而是用之前说的 reactive 函数处理数据。<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/refs%E4%BD%BF%E7%94%A8%E6%AD%A3%E5%B8%B8.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>我们可以看到，页面是可以正常解析的，那为什么我们还有舍近求远的使用 toRefs 函数呢？<br>其实是有原因的。<br>其实 toRefs 函数最大的用处在这里！<br>我们这个 boy 对象里面只有两个参数比较少，如果我们这个对象里面有十个参数或者是更多的话，每次展示的时候都得写那么多遍的 boy 点，是不是很麻烦呢？所以说使用 toRefs 函数就可以解决这个问题，看下面的代码。<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/refs%E8%A7%A3%E5%86%B3%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>在 return 抛出 reactive 的时候，使用扩展运算符和 toRefs 函数，就可以实现直接写属性的方式展示数据了。<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/refs%E4%BD%BF%E7%94%A8%E6%AD%A3%E5%B8%B8.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>但是呢，深层次的对象依旧需要通过点来实现。<br>也许你还有疑问，直接扩展运算 reactive 函数也行啊，为啥要套上 toRefs 函数。<br>记住一点，toRefs 函数修改，原始数据被改变，页面不会被触发。<br>看下面代码：<br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/%E6%95%B0%E6%8D%AE%E6%BA%90%E7%BB%93%E6%9E%9C.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>从打印结果中可以看出，原始数据被改变，页面没有被触发。但从写法上应该可以注意到，toRefs 返回的对象，随便解、随便构，丝毫不会影响值的响应性。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>如果想让响应式数据和以前的数据关联起来，并且想在更新响应式数据的时候不更新视图，那么就使用 toRef 函数。<br>如果希望将对象的多个属性都变成响应式数据，并且要求响应式数据和原始数据关联，并且更新响应式数据的时候不更新视图，就使用 toRefs 函数用于批量设置多个数据为响应式数据。因为 toRef 函数一次仅能设置一个数据。<br>toRefs 函数接收一个对象作为参数，它会遍历对象身上的所有属性，然后挨个调用 toRef 函数执行。</p>
+
+</article>
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2022/10/17/Vue3%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <div class="trm-cover-img" data-random-img></div>
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/vue3/">
+                    vue3
+                </a>
+            </div>
+            <h5>
+                <a href="/2022/10/17/Vue3%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7/" class="trm-anima-link">
+                    Vue3计算属性
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>22/10/17</li>
+                <li>20:06</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <div class="trm-cover-img" data-random-img></div>
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/vue3/">
+                    vue3
+                </a>
+            </div>
+            <h5>
+                <a href="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/" class="trm-anima-link">
+                    vue3ref和reactive函数
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>22/10/13</li>
+                <li>17:11</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2023</span>
+            <span class="footer-separator"data-separator=" | "></span>
+            <span class="trm-accent-color">LjylWnxx</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            博客已运行 <span id="since" class="trm-accent-color"></span> 天
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        var BirthDay = new Date("08/16/2022 21:45:54");
+        var today = new Date();
+        var timeold = (today.getTime() - BirthDay.getTime());
+        var msPerDay = 24 * 60 * 60 * 1000
+        var day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont iconfont icon-read"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont iconfont icon-arrows-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont iconfont icon-i-back-top"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont iconfont icon-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont iconfont icon-close"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.0.7"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.0.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.7"></script>
+
+</body>
+
+</html>

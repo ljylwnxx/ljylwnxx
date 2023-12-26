@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="作为一个前端开发，我们在完成前端开发的过程中，经常会遇到很多数据处理的需求，开发者会根据不同的业务需求来实现对应的业务功能。前端在渲染页面时，通常会涉及到要对拿到的数据进行处理。这里介绍几种数组，对象遍历的数据处理方法。 一、遍历数组方法一：for循环for 循环是使用最多，也是性能优化最好的一种遍历方式。var arr &#x3D; [&quot;a&quot;, &quot;b&quot;, &amp;quot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数组，对象遍历的用法总结">
+<meta property="og:url" content="http://example.com/2023/03/21/%E6%95%B0%E7%BB%84%EF%BC%8C%E5%AF%B9%E8%B1%A1%E9%81%8D%E5%8E%86%E7%9A%84%E7%94%A8%E6%B3%95%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="ljylwnxx的博客">
+<meta property="og:description" content="作为一个前端开发，我们在完成前端开发的过程中，经常会遇到很多数据处理的需求，开发者会根据不同的业务需求来实现对应的业务功能。前端在渲染页面时，通常会涉及到要对拿到的数据进行处理。这里介绍几种数组，对象遍历的数据处理方法。 一、遍历数组方法一：for循环for 循环是使用最多，也是性能优化最好的一种遍历方式。var arr &#x3D; [&quot;a&quot;, &quot;b&quot;, &amp;quot">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-21T03:06:45.000Z">
+<meta property="article:modified_time" content="2023-04-03T04:42:28.282Z">
+<meta property="article:author" content="ljylwnxx">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+
+<title >数组，对象遍历的用法总结</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.png?v=2.0.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.0.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_4020021_2ar0fw3x9h6.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"ljylwnxx","root":"/","typed_text":["今日目标,没有bug","一行代码,定义无限可能","永不脱发,无Bug"],"theme_version":"2.0.7","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/logo.png","icon32":"/img/favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":null,"visibilitychange":true,"hidden":"/failure.png","showText":"(/≧▽≦/)咦！又好啦！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"iconfont icon-sun","moon":"iconfont icon-moon","play":"iconfont icon-play","email":"iconfont icon-email","next":"iconfont icon-xiayibu_next","calendar":"iconfont icon-calendar","clock":"iconfont icon-clock","user":"iconfont icon-user","back_top":"iconfont icon-i-back-top","close":"iconfont icon-close","search":"iconfont icon-search","user_tag":"iconfont icon-user-tag","toc_tag":"iconfont icon-fenleimulu","read":"iconfont icon-read","arrows":"iconfont icon-arrows-h","double_arrows":"iconfont icon-zhankai","copy":"iconfont icon-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"covers":["/images/defaultcover.png","/images/defaultimg.png","/images/defaultimg1.png","/images/defaultimg2.png","/images/defaultimg3.png","/images/defaultimg4.png","/images/defaultimg5.png","/images/defaultimg6.png","/images/defaultimg7.png","/images/default.png"],"search":{"enable":true,"domain":null,"type":"local","preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-04-03 2023-04-03T12:42:28+08:00"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont iconfont icon-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont iconfont icon-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/logo.png">
+    
+    
+        <div class="trm-logo-text">
+            LjylWnxx
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友情链接
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/tags/" target="">
+                    标签
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/categories/" target="">
+                    分类
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			<!--  -->
+    <!-- mode switcher place -->
+    <!-- <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont iconfont icon-moon"></i>
+        </div>
+    </div> -->
+    <!-- mode switcher place end -->
+<!--  -->
+<!-- 
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+   -->
+  
+
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont iconfont icon-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            数组，对象遍历的用法总结
+                        </h1>
+                            
+                        <!-- 
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                         -->
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont iconfont icon-user-tag"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont iconfont icon-fenleimulu"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.png">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        LjylWnxx
+    </h5>
+    
+        <div class="trm-label">
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+                <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-github"></i>
+        </a>
+    
+        <a href="https://gitee.com" title="gitee" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-gitee"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+                <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                个签:
+            </div>
+            <div class="trm-label trm-label-light">
+                Hello World!
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+                
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:ljylwnxx@163.com" class="trm-btn">
+            联系我
+            <i class="iconfont iconfont icon-email"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#一、遍历数组"  data-scroll-to="#一、遍历数组"><span class="toc-number">1.</span> <span class="toc-text">一、遍历数组</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#方法一：for循环"  data-scroll-to="#方法一：for循环"><span class="toc-number">1.1.</span> <span class="toc-text">方法一：for循环</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#for-循环是使用最多，也是性能优化最好的一种遍历方式。"  data-scroll-to="#for-循环是使用最多，也是性能优化最好的一种遍历方式。"><span class="toc-number">1.1.1.</span> <span class="toc-text">for 循环是使用最多，也是性能优化最好的一种遍历方式。</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#方法二：for-of-遍历"  data-scroll-to="#方法二：for-of-遍历"><span class="toc-number">1.2.</span> <span class="toc-text">方法二：for-of 遍历</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#方法三：数组方法"  data-scroll-to="#方法三：数组方法"><span class="toc-number">1.3.</span> <span class="toc-text">方法三：数组方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#1-forEach-方法，对原数组没有影响"  data-scroll-to="#1-forEach-方法，对原数组没有影响"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.forEach()方法，对原数组没有影响</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-map-方法"  data-scroll-to="#2-map-方法"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.map()方法</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#3-filter-方法，不改变原始数组"  data-scroll-to="#3-filter-方法，不改变原始数组"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.filter()方法，不改变原始数组</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#4-reduce-方法"  data-scroll-to="#4-reduce-方法"><span class="toc-number">1.3.4.</span> <span class="toc-text">4.reduce()方法</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#5-every-方法用于检测数组元素是否全部符合指定条件，只有全部满足条件时才会返回true。every-是对数组中的每一项运行给定函数，如果该函数对每一项返回true-则返回true-在执行的过程中，如果遇到了false的情况，就停止继续往下执行；直接返回false。"  data-scroll-to="#5-every-方法用于检测数组元素是否全部符合指定条件，只有全部满足条件时才会返回true。every-是对数组中的每一项运行给定函数，如果该函数对每一项返回true-则返回true-在执行的过程中，如果遇到了false的情况，就停止继续往下执行；直接返回false。"><span class="toc-number">1.3.5.</span> <span class="toc-text">5.every()方法用于检测数组元素是否全部符合指定条件，只有全部满足条件时才会返回true。every()是对数组中的每一项运行给定函数，如果该函数对每一项返回true,则返回true;在执行的过程中，如果遇到了false的情况，就停止继续往下执行；直接返回false。</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-some-方法用于检测数组是否存在一个符合指定条件的元素，只有一个满足条件就返回true。some-是对数组中的每一项运行指定函数；该函数对其中任意一项返回true-就返回true-返回true就不再往下执行。"  data-scroll-to="#6-some-方法用于检测数组是否存在一个符合指定条件的元素，只有一个满足条件就返回true。some-是对数组中的每一项运行指定函数；该函数对其中任意一项返回true-就返回true-返回true就不再往下执行。"><span class="toc-number">1.3.6.</span> <span class="toc-text">6.some()方法用于检测数组是否存在一个符合指定条件的元素，只有一个满足条件就返回true。some()是对数组中的每一项运行指定函数；该函数对其中任意一项返回true, 就返回true; 返回true就不再往下执行。</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#7-find-返回数组中符合条件的第一个元素；没有就返回undefined-不改变原始数组-find对空数组不执行。"  data-scroll-to="#7-find-返回数组中符合条件的第一个元素；没有就返回undefined-不改变原始数组-find对空数组不执行。"><span class="toc-number">1.3.7.</span> <span class="toc-text">7.find() 返回数组中符合条件的第一个元素；没有就返回undefined,不改变原始数组,find对空数组不执行。</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#8-findIndex-返回符合条件的第一个元素的下标，没有符合条件的元素则返回-1，不改变原始数组-findIndex对空数组不执行。"  data-scroll-to="#8-findIndex-返回符合条件的第一个元素的下标，没有符合条件的元素则返回-1，不改变原始数组-findIndex对空数组不执行。"><span class="toc-number">1.3.8.</span> <span class="toc-text">8.findIndex() 返回符合条件的第一个元素的下标，没有符合条件的元素则返回-1，不改变原始数组,findIndex对空数组不执行。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#二、遍历对象"  data-scroll-to="#二、遍历对象"><span class="toc-number">2.</span> <span class="toc-text">二、遍历对象</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#方法一：for-in-循环"  data-scroll-to="#方法一：for-in-循环"><span class="toc-number">2.1.</span> <span class="toc-text">方法一：for-in 循环</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#方法二：Object-keys-可理解为返回里面的key属性"  data-scroll-to="#方法二：Object-keys-可理解为返回里面的key属性"><span class="toc-number">2.2.</span> <span class="toc-text">方法二：Object.keys() 可理解为返回里面的key属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#1-处理对象时：返回可枚举的属性数组"  data-scroll-to="#1-处理对象时：返回可枚举的属性数组"><span class="toc-number">2.2.1.</span> <span class="toc-text">1.处理对象时：返回可枚举的属性数组</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-处理数组时：返回索引值数组"  data-scroll-to="#2-处理数组时：返回索引值数组"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.处理数组时：返回索引值数组</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#3-处理字符串数据时：返回索引值数组"  data-scroll-to="#3-处理字符串数据时：返回索引值数组"><span class="toc-number">2.2.3.</span> <span class="toc-text">3.处理字符串数据时：返回索引值数组</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#方法三：Object-values-方法，可理解为返回里面的value值，Object-values只返回对象自身的可遍历属性。"  data-scroll-to="#方法三：Object-values-方法，可理解为返回里面的value值，Object-values只返回对象自身的可遍历属性。"><span class="toc-number">2.3.</span> <span class="toc-text">方法三：Object.values()方法，可理解为返回里面的value值，Object.values只返回对象自身的可遍历属性。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#1-处理对象数据时：返回可枚举的值组成的数组"  data-scroll-to="#1-处理对象数据时：返回可枚举的值组成的数组"><span class="toc-number">2.3.1.</span> <span class="toc-text">1.处理对象数据时：返回可枚举的值组成的数组</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-处理数组数据时：返回原数组"  data-scroll-to="#2-处理数组数据时：返回原数组"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.处理数组数据时：返回原数组</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#属性名为数值的属性，是按照数值大小，从小到大遍历的。"  data-scroll-to="#属性名为数值的属性，是按照数值大小，从小到大遍历的。"><span class="toc-number">2.3.3.</span> <span class="toc-text">属性名为数值的属性，是按照数值大小，从小到大遍历的。</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#3-处理字符串数据时：返回每个字符组成的数组"  data-scroll-to="#3-处理字符串数据时：返回每个字符组成的数组"><span class="toc-number">2.3.4.</span> <span class="toc-text">3.处理字符串数据时：返回每个字符组成的数组</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#4-Object-values会过滤属性名为-Symbol-值的属性"  data-scroll-to="#4-Object-values会过滤属性名为-Symbol-值的属性"><span class="toc-number">2.3.5.</span> <span class="toc-text">4.Object.values会过滤属性名为 Symbol 值的属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#方法四：Object-entries-方法"  data-scroll-to="#方法四：Object-entries-方法"><span class="toc-number">2.4.</span> <span class="toc-text">方法四：Object.entries()方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#1-处理对象数据时：返回是一个二维数组。每一项是-key-value-形式。"  data-scroll-to="#1-处理对象数据时：返回是一个二维数组。每一项是-key-value-形式。"><span class="toc-number">2.4.1.</span> <span class="toc-text">1.处理对象数据时：返回是一个二维数组。每一项是[key, value]形式。</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-处理数组数据时：返回也是一个二维数组，数组里面的每一项-index-value-形式。"  data-scroll-to="#2-处理数组数据时：返回也是一个二维数组，数组里面的每一项-index-value-形式。"><span class="toc-number">2.4.2.</span> <span class="toc-text">2.处理数组数据时：返回也是一个二维数组，数组里面的每一项[index, value] 形式。</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#数组中包含对象："  data-scroll-to="#数组中包含对象："><span class="toc-number">2.4.3.</span> <span class="toc-text">数组中包含对象：</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#3-处理字符串数据时：返回也是一个二维数组。"  data-scroll-to="#3-处理字符串数据时：返回也是一个二维数组。"><span class="toc-number">2.4.4.</span> <span class="toc-text">3.处理字符串数据时：返回也是一个二维数组。</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#方法五：Object-assign-：Object-assign-方法的第一个参数是目标对象，后面的参数都是源对象。"  data-scroll-to="#方法五：Object-assign-：Object-assign-方法的第一个参数是目标对象，后面的参数都是源对象。"><span class="toc-number">2.5.</span> <span class="toc-text">方法五：Object.assign()：Object.assign 方法的第一个参数是目标对象，后面的参数都是源对象。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#注意，如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。"  data-scroll-to="#注意，如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。"><span class="toc-number">2.5.1.</span> <span class="toc-text">注意，如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#方法六：Object-getOwnPropertyNames"  data-scroll-to="#方法六：Object-getOwnPropertyNames"><span class="toc-number">2.6.</span> <span class="toc-text">方法六：Object.getOwnPropertyNames()</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#Object-getOwnPropertyNames-返回一个数组，该数组对元素是-obj自身拥有的枚举或不可枚举属性名称字符串。数组中枚举属性的顺序与通过-for…in-循环（或-Object-keys）迭代该对象属性时一致。数组中不可枚举属性的顺序未定义。"  data-scroll-to="#Object-getOwnPropertyNames-返回一个数组，该数组对元素是-obj自身拥有的枚举或不可枚举属性名称字符串。数组中枚举属性的顺序与通过-for…in-循环（或-Object-keys）迭代该对象属性时一致。数组中不可枚举属性的顺序未定义。"><span class="toc-number">2.6.1.</span> <span class="toc-text">Object.getOwnPropertyNames() 返回一个数组，该数组对元素是 obj自身拥有的枚举或不可枚举属性名称字符串。数组中枚举属性的顺序与通过 for…in 循环（或 Object.keys）迭代该对象属性时一致。数组中不可枚举属性的顺序未定义。</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#类数组对象"  data-scroll-to="#类数组对象"><span class="toc-number">2.6.2.</span> <span class="toc-text">&#x2F;&#x2F; 类数组对象</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#使用-Array-forEach-输出属性名和属性值"  data-scroll-to="#使用-Array-forEach-输出属性名和属性值"><span class="toc-number">2.6.3.</span> <span class="toc-text">&#x2F;&#x2F; 使用 Array.forEach 输出属性名和属性值</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#不可枚举属性"  data-scroll-to="#不可枚举属性"><span class="toc-number">2.6.4.</span> <span class="toc-text">&#x2F;&#x2F;不可枚举属性</span></a></li></ol></li></ol></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-calendar trm-icon"></i><br>
+            03/21
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-clock trm-icon"></i><br>
+            11:06
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-user trm-icon"></i><br>
+            ljylwnxx
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <p>作为一个前端开发，我们在完成前端开发的过程中，经常会遇到很多数据处理的需求，开发者会根据不同的业务需求来实现对应的业务功能。<br>前端在渲染页面时，通常会涉及到要对拿到的数据进行处理。这里介绍几种数组，对象遍历的数据处理方法。</p>
+<h1 id="一、遍历数组"><a href="#一、遍历数组" class="headerlink" title="一、遍历数组"></a>一、遍历数组</h1><h2 id="方法一：for循环"><a href="#方法一：for循环" class="headerlink" title="方法一：for循环"></a>方法一：for循环</h2><h3 id="for-循环是使用最多，也是性能优化最好的一种遍历方式。"><a href="#for-循环是使用最多，也是性能优化最好的一种遍历方式。" class="headerlink" title="for 循环是使用最多，也是性能优化最好的一种遍历方式。"></a>for 循环是使用最多，也是性能优化最好的一种遍历方式。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</span><br><span class="line">for (var i = 0; i &lt; arr.length; i++) &#123;</span><br><span class="line">  console.log(arr[i])</span><br><span class="line">&#125;</span><br><span class="line">// Expected output:a b c</span><br></pre></td></tr></table></figure>
+<h2 id="方法二：for-of-遍历"><a href="#方法二：for-of-遍历" class="headerlink" title="方法二：for-of 遍历"></a>方法二：for-of 遍历</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</span><br><span class="line">for (let item of arr) &#123;</span><br><span class="line">  console.log(item)</span><br><span class="line">&#125;</span><br><span class="line">// Expected output:a b c</span><br></pre></td></tr></table></figure>
+<h2 id="方法三：数组方法"><a href="#方法三：数组方法" class="headerlink" title="方法三：数组方法"></a>方法三：数组方法</h2><h3 id="1-forEach-方法，对原数组没有影响"><a href="#1-forEach-方法，对原数组没有影响" class="headerlink" title="1.forEach()方法，对原数组没有影响"></a>1.forEach()方法，对原数组没有影响</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</span><br><span class="line">arr.forEach((index, item) =&gt; &#123;</span><br><span class="line">  console.log(index, item)</span><br><span class="line">&#125;)</span><br><span class="line">//Expected output:</span><br><span class="line">// a 0</span><br><span class="line">// b 1</span><br><span class="line">// c 2</span><br></pre></td></tr></table></figure>
+<h3 id="2-map-方法"><a href="#2-map-方法" class="headerlink" title="2.map()方法"></a>2.map()方法</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [1, 2, 3]</span><br><span class="line">var newArr = arr.map(item =&gt; &#123;</span><br><span class="line">  return item * 2</span><br><span class="line">&#125;);</span><br><span class="line">console.log(newArr); </span><br><span class="line">// Expected output:[2, 4, 6]</span><br></pre></td></tr></table></figure>
+<h3 id="3-filter-方法，不改变原始数组"><a href="#3-filter-方法，不改变原始数组" class="headerlink" title="3.filter()方法，不改变原始数组"></a>3.filter()方法，不改变原始数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [1, 2, 3]</span><br><span class="line">var newArr = arr.filter(item =&gt; &#123;</span><br><span class="line">  return item &gt; 1</span><br><span class="line">&#125;);</span><br><span class="line">console.log(newArr)</span><br><span class="line">// Expected output:[2, 3]</span><br></pre></td></tr></table></figure>
+<h3 id="4-reduce-方法"><a href="#4-reduce-方法" class="headerlink" title="4.reduce()方法"></a>4.reduce()方法</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [1, 2, 3]</span><br><span class="line">var sum = arr.reduce((pre, cur) =&gt; &#123;</span><br><span class="line">  return pre + cur</span><br><span class="line">&#125;);</span><br><span class="line">console.log(sum)</span><br><span class="line">// Expected output:6</span><br></pre></td></tr></table></figure>
+<h3 id="5-every-方法用于检测数组元素是否全部符合指定条件，只有全部满足条件时才会返回true。every-是对数组中的每一项运行给定函数，如果该函数对每一项返回true-则返回true-在执行的过程中，如果遇到了false的情况，就停止继续往下执行；直接返回false。"><a href="#5-every-方法用于检测数组元素是否全部符合指定条件，只有全部满足条件时才会返回true。every-是对数组中的每一项运行给定函数，如果该函数对每一项返回true-则返回true-在执行的过程中，如果遇到了false的情况，就停止继续往下执行；直接返回false。" class="headerlink" title="5.every()方法用于检测数组元素是否全部符合指定条件，只有全部满足条件时才会返回true。every()是对数组中的每一项运行给定函数，如果该函数对每一项返回true,则返回true;在执行的过程中，如果遇到了false的情况，就停止继续往下执行；直接返回false。"></a>5.every()方法用于检测数组元素是否全部符合指定条件，只有全部满足条件时才会返回true。every()是对数组中的每一项运行给定函数，如果该函数对每一项返回true,则返回true;在执行的过程中，如果遇到了false的情况，就停止继续往下执行；直接返回false。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [1, 2, 3]</span><br><span class="line">var bool = arr.every(item =&gt; &#123;</span><br><span class="line">  return item &lt; 5</span><br><span class="line">&#125;);</span><br><span class="line">console.log(bool)</span><br><span class="line">// Expected output:true</span><br></pre></td></tr></table></figure>
+<h3 id="6-some-方法用于检测数组是否存在一个符合指定条件的元素，只有一个满足条件就返回true。some-是对数组中的每一项运行指定函数；该函数对其中任意一项返回true-就返回true-返回true就不再往下执行。"><a href="#6-some-方法用于检测数组是否存在一个符合指定条件的元素，只有一个满足条件就返回true。some-是对数组中的每一项运行指定函数；该函数对其中任意一项返回true-就返回true-返回true就不再往下执行。" class="headerlink" title="6.some()方法用于检测数组是否存在一个符合指定条件的元素，只有一个满足条件就返回true。some()是对数组中的每一项运行指定函数；该函数对其中任意一项返回true, 就返回true; 返回true就不再往下执行。"></a>6.some()方法用于检测数组是否存在一个符合指定条件的元素，只有一个满足条件就返回true。some()是对数组中的每一项运行指定函数；该函数对其中任意一项返回true, 就返回true; 返回true就不再往下执行。</h3><h4 id="下面的例子是检测数组元素是否存在-Number-类型。"><a href="#下面的例子是检测数组元素是否存在-Number-类型。" class="headerlink" title="下面的例子是检测数组元素是否存在 Number 类型。"></a>下面的例子是检测数组元素是否存在 Number 类型。</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [&quot;a&quot;, 1, &quot;b&quot;]</span><br><span class="line">var bool = arr.some(item =&gt; &#123;</span><br><span class="line">  return typeof item === &quot;number&quot;</span><br><span class="line">&#125;)</span><br><span class="line">console.log(bool)</span><br><span class="line">// Expected output:true</span><br></pre></td></tr></table></figure>
+<h3 id="7-find-返回数组中符合条件的第一个元素；没有就返回undefined-不改变原始数组-find对空数组不执行。"><a href="#7-find-返回数组中符合条件的第一个元素；没有就返回undefined-不改变原始数组-find对空数组不执行。" class="headerlink" title="7.find() 返回数组中符合条件的第一个元素；没有就返回undefined,不改变原始数组,find对空数组不执行。"></a>7.find() 返回数组中符合条件的第一个元素；没有就返回undefined,不改变原始数组,find对空数组不执行。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let arr = [1, 2, 3, 4, 5]</span><br><span class="line">let find = arr.find((item) =&gt; &#123;</span><br><span class="line">  return item % 2 === 0</span><br><span class="line">&#125;)</span><br><span class="line">// Expected output:find =2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [1, 2, 3]</span><br><span class="line">var ret = arr.find(ele =&gt; ele &gt; 2)</span><br><span class="line">console.log(ret)</span><br><span class="line">// Expected output:3</span><br><span class="line">console.log(arr)</span><br><span class="line">// Expected output:[1, 2, 3]</span><br></pre></td></tr></table></figure>
+<h3 id="8-findIndex-返回符合条件的第一个元素的下标，没有符合条件的元素则返回-1，不改变原始数组-findIndex对空数组不执行。"><a href="#8-findIndex-返回符合条件的第一个元素的下标，没有符合条件的元素则返回-1，不改变原始数组-findIndex对空数组不执行。" class="headerlink" title="8.findIndex() 返回符合条件的第一个元素的下标，没有符合条件的元素则返回-1，不改变原始数组,findIndex对空数组不执行。"></a>8.findIndex() 返回符合条件的第一个元素的下标，没有符合条件的元素则返回-1，不改变原始数组,findIndex对空数组不执行。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">let arr = [1, 2, 3, 4, 5]</span><br><span class="line">let findIndex = arr.findIndex((item) =&gt; &#123;</span><br><span class="line">  return item % 2 === 0</span><br><span class="line">&#125;) </span><br><span class="line">// Expected output:findIndex = 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [1, 2, 3, 4 ,5]</span><br><span class="line">var ret = arr.findIndex(ele =&gt; ele &gt; 2) </span><br><span class="line">console.log(ret)</span><br><span class="line">// Expected output:2</span><br><span class="line"> console.log(arr)</span><br><span class="line">// Expected output:[1, 2, 3, 4, 5]</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、遍历对象"><a href="#二、遍历对象" class="headerlink" title="二、遍历对象"></a>二、遍历对象</h1><h2 id="方法一：for-in-循环"><a href="#方法一：for-in-循环" class="headerlink" title="方法一：for-in 循环"></a>方法一：for-in 循环</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var obj = &#123; a: 2, b: 4, c: 6 &#125;</span><br><span class="line">for (let key in obj) &#123;</span><br><span class="line">  console.log(key)</span><br><span class="line">&#125;</span><br><span class="line">// Expected output:a b c</span><br></pre></td></tr></table></figure>
+<h2 id="方法二：Object-keys-可理解为返回里面的key属性"><a href="#方法二：Object-keys-可理解为返回里面的key属性" class="headerlink" title="方法二：Object.keys() 可理解为返回里面的key属性"></a>方法二：Object.keys() 可理解为返回里面的key属性</h2><h3 id="1-处理对象时：返回可枚举的属性数组"><a href="#1-处理对象时：返回可枚举的属性数组" class="headerlink" title="1.处理对象时：返回可枚举的属性数组"></a>1.处理对象时：返回可枚举的属性数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var w_n = Object.keys(&#123;name: &quot;wn&quot;, address: &quot;中国&quot;&#125;) </span><br><span class="line">console.log(w_n)</span><br><span class="line">// Expected output:[&#x27;name&#x27;, &#x27;address&#x27;]</span><br></pre></td></tr></table></figure>
+<h3 id="2-处理数组时：返回索引值数组"><a href="#2-处理数组时：返回索引值数组" class="headerlink" title="2.处理数组时：返回索引值数组"></a>2.处理数组时：返回索引值数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var w_n = Object.keys([11,22,33,44]) </span><br><span class="line">console.log(w_n)</span><br><span class="line">// Expected output:[&#x27;0&#x27;,&#x27;1&#x27;,&#x27;2&#x27;,&#x27;3&#x27;]</span><br></pre></td></tr></table></figure>
+<h3 id="3-处理字符串数据时：返回索引值数组"><a href="#3-处理字符串数据时：返回索引值数组" class="headerlink" title="3.处理字符串数据时：返回索引值数组"></a>3.处理字符串数据时：返回索引值数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var str=&#x27;hello&#x27;;</span><br><span class="line">console.log(Object.keys(str))</span><br><span class="line">// Expected output:[&#x27;0&#x27;,&#x27;1&#x27;,&#x27;2&#x27;,&#x27;3&#x27;,&#x27;4&#x27;]</span><br></pre></td></tr></table></figure>
+<h2 id="方法三：Object-values-方法，可理解为返回里面的value值，Object-values只返回对象自身的可遍历属性。"><a href="#方法三：Object-values-方法，可理解为返回里面的value值，Object-values只返回对象自身的可遍历属性。" class="headerlink" title="方法三：Object.values()方法，可理解为返回里面的value值，Object.values只返回对象自身的可遍历属性。"></a>方法三：Object.values()方法，可理解为返回里面的value值，Object.values只返回对象自身的可遍历属性。</h2><h3 id="1-处理对象数据时：返回可枚举的值组成的数组"><a href="#1-处理对象数据时：返回可枚举的值组成的数组" class="headerlink" title="1.处理对象数据时：返回可枚举的值组成的数组"></a>1.处理对象数据时：返回可枚举的值组成的数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var w_n = Object.values(&#123;name: &quot;wn&quot;, address: &quot;中国&quot;&#125;) </span><br><span class="line">console.log(w_n)</span><br><span class="line">// Expected output:[&#x27;wn&#x27;, &#x27;中国&#x27;]</span><br></pre></td></tr></table></figure>
+<h3 id="2-处理数组数据时：返回原数组"><a href="#2-处理数组数据时：返回原数组" class="headerlink" title="2.处理数组数据时：返回原数组"></a>2.处理数组数据时：返回原数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var w_n = Object.values([11,22,33,44]) </span><br><span class="line">console.log(w_n)</span><br><span class="line">// Expected output:[11,22,33,44]</span><br></pre></td></tr></table></figure>
+<h3 id="属性名为数值的属性，是按照数值大小，从小到大遍历的。"><a href="#属性名为数值的属性，是按照数值大小，从小到大遍历的。" class="headerlink" title="属性名为数值的属性，是按照数值大小，从小到大遍历的。"></a>属性名为数值的属性，是按照数值大小，从小到大遍历的。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const obj = &#123;10 : &quot;a&quot;, 6 : &quot;b&quot;, 9 : &quot;c&quot;&#125;</span><br><span class="line">console.log(Object.values(obj))</span><br><span class="line">// Expected output:[&#x27;b&#x27;, &#x27;c&#x27;, &#x27;a&#x27;]</span><br></pre></td></tr></table></figure>
+<h3 id="3-处理字符串数据时：返回每个字符组成的数组"><a href="#3-处理字符串数据时：返回每个字符组成的数组" class="headerlink" title="3.处理字符串数据时：返回每个字符组成的数组"></a>3.处理字符串数据时：返回每个字符组成的数组</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">console.log(Object.values(&#x27;hello&#x27;))</span><br><span class="line">// Expected output:[&#x27;h&#x27;, &#x27;e&#x27;, &#x27;l&#x27;, &#x27;l&#x27;, &#x27;o&#x27;]</span><br></pre></td></tr></table></figure>
+<h3 id="4-Object-values会过滤属性名为-Symbol-值的属性"><a href="#4-Object-values会过滤属性名为-Symbol-值的属性" class="headerlink" title="4.Object.values会过滤属性名为 Symbol 值的属性"></a>4.Object.values会过滤属性名为 Symbol 值的属性</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object.values(&#123; [Symbol()]: 123, foo: &#x27;abc&#x27; &#125;)</span><br><span class="line">// Expected output:[&#x27;abc&#x27;]</span><br></pre></td></tr></table></figure>
+<h2 id="方法四：Object-entries-方法"><a href="#方法四：Object-entries-方法" class="headerlink" title="方法四：Object.entries()方法"></a>方法四：Object.entries()方法</h2><h3 id="1-处理对象数据时：返回是一个二维数组。每一项是-key-value-形式。"><a href="#1-处理对象数据时：返回是一个二维数组。每一项是-key-value-形式。" class="headerlink" title="1.处理对象数据时：返回是一个二维数组。每一项是[key, value]形式。"></a>1.处理对象数据时：返回是一个二维数组。每一项是[key, value]形式。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var w_n = Object.entries(&#123;name: &quot;wn&quot;, address: &quot;中国&quot;&#125;) </span><br><span class="line">console.log(w_n)</span><br><span class="line">// Expected output:[[&#x27;name&#x27;, &#x27;wn&#x27;], [&#x27;address&#x27;, &#x27;中国&#x27;]]</span><br></pre></td></tr></table></figure>
+<h3 id="2-处理数组数据时：返回也是一个二维数组，数组里面的每一项-index-value-形式。"><a href="#2-处理数组数据时：返回也是一个二维数组，数组里面的每一项-index-value-形式。" class="headerlink" title="2.处理数组数据时：返回也是一个二维数组，数组里面的每一项[index, value] 形式。"></a>2.处理数组数据时：返回也是一个二维数组，数组里面的每一项[index, value] 形式。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var w_n = Object.entries([11,22,33,44]) </span><br><span class="line">console.log(w_n)</span><br><span class="line">// Expected output:[ [&#x27;0&#x27;,11], [&#x27;1&#x27;,22], [&#x27;2&#x27;,33], [&#x27;3&#x27;,44] ]</span><br></pre></td></tr></table></figure>
+<h3 id="数组中包含对象："><a href="#数组中包含对象：" class="headerlink" title="数组中包含对象："></a>数组中包含对象：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var w_n = Object.entries([&#123;a:11&#125;,22,33,44]) </span><br><span class="line">console.log(w_n)</span><br><span class="line">// Expected output:[ [&#x27;0&#x27;,&#123;a:11&#125;], [&#x27;1&#x27;,22], [&#x27;2&#x27;,33], [&#x27;3&#x27;,44] ]</span><br></pre></td></tr></table></figure>
+<h3 id="3-处理字符串数据时：返回也是一个二维数组。"><a href="#3-处理字符串数据时：返回也是一个二维数组。" class="headerlink" title="3.处理字符串数据时：返回也是一个二维数组。"></a>3.处理字符串数据时：返回也是一个二维数组。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var str=&#x27;hello&#x27;</span><br><span class="line">console.log(Object.entries(str)) </span><br><span class="line">// Expected output:[ [&#x27;0&#x27;,&#x27;h&#x27;], [&#x27;1&#x27;,&#x27;e&#x27;], [&#x27;2&#x27;,&#x27;l&#x27;], [&#x27;3&#x27;,&#x27;l&#x27;] ,[&#x27;4&#x27;,&#x27;o&#x27;] ]</span><br></pre></td></tr></table></figure>
+<h2 id="方法五：Object-assign-：Object-assign-方法的第一个参数是目标对象，后面的参数都是源对象。"><a href="#方法五：Object-assign-：Object-assign-方法的第一个参数是目标对象，后面的参数都是源对象。" class="headerlink" title="方法五：Object.assign()：Object.assign 方法的第一个参数是目标对象，后面的参数都是源对象。"></a>方法五：Object.assign()：Object.assign 方法的第一个参数是目标对象，后面的参数都是源对象。</h2><h3 id="注意，如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。"><a href="#注意，如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。" class="headerlink" title="注意，如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。"></a>注意，如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const target = &#123; a: 1, b: 2 &#125;;</span><br><span class="line">const source = &#123; b: 4, c: 5 &#125;;</span><br><span class="line">const returnedTarget = Object.assign(target, source);</span><br><span class="line">console.log(target);</span><br><span class="line">// Expected output: Object &#123; a: 1, b: 4, c: 5 &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="方法六：Object-getOwnPropertyNames"><a href="#方法六：Object-getOwnPropertyNames" class="headerlink" title="方法六：Object.getOwnPropertyNames()"></a>方法六：Object.getOwnPropertyNames()</h2><h3 id="Object-getOwnPropertyNames-返回一个数组，该数组对元素是-obj自身拥有的枚举或不可枚举属性名称字符串。数组中枚举属性的顺序与通过-for…in-循环（或-Object-keys）迭代该对象属性时一致。数组中不可枚举属性的顺序未定义。"><a href="#Object-getOwnPropertyNames-返回一个数组，该数组对元素是-obj自身拥有的枚举或不可枚举属性名称字符串。数组中枚举属性的顺序与通过-for…in-循环（或-Object-keys）迭代该对象属性时一致。数组中不可枚举属性的顺序未定义。" class="headerlink" title="Object.getOwnPropertyNames() 返回一个数组，该数组对元素是 obj自身拥有的枚举或不可枚举属性名称字符串。数组中枚举属性的顺序与通过 for…in 循环（或 Object.keys）迭代该对象属性时一致。数组中不可枚举属性的顺序未定义。"></a>Object.getOwnPropertyNames() 返回一个数组，该数组对元素是 obj自身拥有的枚举或不可枚举属性名称字符串。数组中枚举属性的顺序与通过 for…in 循环（或 Object.keys）迭代该对象属性时一致。数组中不可枚举属性的顺序未定义。</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var arr = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]</span><br><span class="line">console.log(Object.getOwnPropertyNames(arr).sort()) </span><br><span class="line">// [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;length&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="类数组对象"><a href="#类数组对象" class="headerlink" title="// 类数组对象"></a>// 类数组对象</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var obj = &#123; 0: &quot;a&quot;, 1: &quot;b&quot;, 2: &quot;c&quot;&#125;</span><br><span class="line">console.log(Object.getOwnPropertyNames(obj).sort())</span><br><span class="line">// Expected output:[&quot;0&quot;, &quot;1&quot;, &quot;2&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="使用-Array-forEach-输出属性名和属性值"><a href="#使用-Array-forEach-输出属性名和属性值" class="headerlink" title="// 使用 Array.forEach 输出属性名和属性值"></a>// 使用 Array.forEach 输出属性名和属性值</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object.getOwnPropertyNames(obj).forEach(function(val, idx, array) &#123;</span><br><span class="line">  console.log(val + &quot; -&gt; &quot; + obj[val])</span><br><span class="line">&#125;)</span><br><span class="line">// Expected output:</span><br><span class="line">// 0 -&gt; a</span><br><span class="line">// 1 -&gt; b</span><br><span class="line">// 2 -&gt; c</span><br></pre></td></tr></table></figure>
+<h3 id="不可枚举属性"><a href="#不可枚举属性" class="headerlink" title="//不可枚举属性"></a>//不可枚举属性</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var my_obj = Object.create(&#123;&#125;, &#123;</span><br><span class="line">  getFoo: &#123;</span><br><span class="line">    value: function() &#123; return this.foo; &#125;,</span><br><span class="line">    enumerable: false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">my_obj.foo = 1</span><br><span class="line">console.log(Object.getOwnPropertyNames(my_obj).sort())</span><br><span class="line">// Expected output:[&quot;foo&quot;, &quot;getFoo&quot;]</span><br></pre></td></tr></table></figure>
+
+</article>
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/23/component%E5%8A%A8%E6%80%81%E7%BB%84%E4%BB%B6/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <div class="trm-cover-img" data-random-img></div>
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">
+                    知识点
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/23/component%E5%8A%A8%E6%80%81%E7%BB%84%E4%BB%B6/" class="trm-anima-link">
+                    component动态组件
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/23</li>
+                <li>21:27</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/13/serve%E7%9A%84%E5%8C%BA%E5%88%AB/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <div class="trm-cover-img" data-random-img></div>
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%9F%A5%E8%AF%86%E7%82%B9/">
+                    知识点
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/13/serve%E7%9A%84%E5%8C%BA%E5%88%AB/" class="trm-anima-link">
+                    浅析vue项目中npm run dev和npm run serve的区别
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/13</li>
+                <li>11:03</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2023</span>
+            <span class="footer-separator"data-separator=" | "></span>
+            <span class="trm-accent-color">LjylWnxx</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            博客已运行 <span id="since" class="trm-accent-color"></span> 天
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        var BirthDay = new Date("08/16/2022 21:45:54");
+        var today = new Date();
+        var timeold = (today.getTime() - BirthDay.getTime());
+        var msPerDay = 24 * 60 * 60 * 1000
+        var day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont iconfont icon-read"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont iconfont icon-arrows-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont iconfont icon-i-back-top"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont iconfont icon-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont iconfont icon-close"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.0.7"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.0.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.7"></script>
+
+</body>
+
+</html>

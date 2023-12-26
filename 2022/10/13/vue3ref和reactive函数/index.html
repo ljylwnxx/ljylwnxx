@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="ref 函数介绍 ref 作用就是将基础数据转换为响应式数据，把数据包装成响应式的引用数据类型的数据。 通过对参数返回值的 value 属性获取响应式的值，并且修改的时候也需要对 value 进行修改。 在vue2当中，通过给元素添加 ref&#x3D;’xxx’然后使用refs.xxx的方式来获取元素，vue3也可以。 当 ref 里面的值发生变化的时候，视图会自动更新数据。 ref 可以操作基本数据类型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue3ref和reactive函数">
+<meta property="og:url" content="http://example.com/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="ljylwnxx的博客">
+<meta property="og:description" content="ref 函数介绍 ref 作用就是将基础数据转换为响应式数据，把数据包装成响应式的引用数据类型的数据。 通过对参数返回值的 value 属性获取响应式的值，并且修改的时候也需要对 value 进行修改。 在vue2当中，通过给元素添加 ref&#x3D;’xxx’然后使用refs.xxx的方式来获取元素，vue3也可以。 当 ref 里面的值发生变化的时候，视图会自动更新数据。 ref 可以操作基本数据类型">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="article:published_time" content="2022-10-13T09:11:20.000Z">
+<meta property="article:modified_time" content="2023-03-22T06:26:35.705Z">
+<meta property="article:author" content="ljylwnxx">
+<meta property="article:tag" content="vue3">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/404.jpg">
+
+
+<title >vue3ref和reactive函数</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.png?v=2.0.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.0.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_4020021_2ar0fw3x9h6.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"ljylwnxx","root":"/","typed_text":["今日目标,没有bug","一行代码,定义无限可能","永不脱发,无Bug"],"theme_version":"2.0.7","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/logo.png","icon32":"/img/favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":null,"visibilitychange":true,"hidden":"/failure.png","showText":"(/≧▽≦/)咦！又好啦！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"iconfont icon-sun","moon":"iconfont icon-moon","play":"iconfont icon-play","email":"iconfont icon-email","next":"iconfont icon-xiayibu_next","calendar":"iconfont icon-calendar","clock":"iconfont icon-clock","user":"iconfont icon-user","back_top":"iconfont icon-i-back-top","close":"iconfont icon-close","search":"iconfont icon-search","user_tag":"iconfont icon-user-tag","toc_tag":"iconfont icon-fenleimulu","read":"iconfont icon-read","arrows":"iconfont icon-arrows-h","double_arrows":"iconfont icon-zhankai","copy":"iconfont icon-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"covers":["/images/defaultcover.png","/images/defaultimg.png","/images/defaultimg1.png","/images/defaultimg2.png","/images/defaultimg3.png","/images/defaultimg4.png","/images/defaultimg5.png","/images/defaultimg6.png","/images/defaultimg7.png","/images/default.png"],"search":{"enable":true,"domain":null,"type":"local","preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-03-22 2023-03-22T14:26:35+08:00"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont iconfont icon-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont iconfont icon-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/logo.png">
+    
+    
+        <div class="trm-logo-text">
+            LjylWnxx
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友情链接
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/tags/" target="">
+                    标签
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/categories/" target="">
+                    分类
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			<!--  -->
+    <!-- mode switcher place -->
+    <!-- <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont iconfont icon-moon"></i>
+        </div>
+    </div> -->
+    <!-- mode switcher place end -->
+<!--  -->
+<!-- 
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont iconfont icon-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+   -->
+  
+
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont iconfont icon-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            vue3ref和reactive函数
+                        </h1>
+                            
+                        <!-- 
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2022
+                                    </span
+                                ></li>
+                            </ul>
+                         -->
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont iconfont icon-user-tag"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont iconfont icon-fenleimulu"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.png">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        LjylWnxx
+    </h5>
+    
+        <div class="trm-label">
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+                <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-github"></i>
+        </a>
+    
+        <a href="https://gitee.com" title="gitee" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont icon-gitee"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+                <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                个签:
+            </div>
+            <div class="trm-label trm-label-light">
+                Hello World!
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+                
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:ljylwnxx@163.com" class="trm-btn">
+            联系我
+            <i class="iconfont iconfont icon-email"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#ref-函数介绍"  data-scroll-to="#ref-函数介绍"><span class="toc-number">1.</span> <span class="toc-text">ref 函数介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#ref-函数使用"  data-scroll-to="#ref-函数使用"><span class="toc-number">1.1.</span> <span class="toc-text">ref 函数使用</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#ref-函数处理基本数据类型"  data-scroll-to="#ref-函数处理基本数据类型"><span class="toc-number">1.2.</span> <span class="toc-text">ref 函数处理基本数据类型</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#ref-函数处理复杂数据类型"  data-scroll-to="#ref-函数处理复杂数据类型"><span class="toc-number">1.3.</span> <span class="toc-text">ref 函数处理复杂数据类型</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#ref-函数获取单个DOM元素"  data-scroll-to="#ref-函数获取单个DOM元素"><span class="toc-number">1.4.</span> <span class="toc-text">ref 函数获取单个DOM元素</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#reactive-函数介绍"  data-scroll-to="#reactive-函数介绍"><span class="toc-number">2.</span> <span class="toc-text">reactive 函数介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#reactive-函数使用"  data-scroll-to="#reactive-函数使用"><span class="toc-number">2.1.</span> <span class="toc-text">reactive 函数使用</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#reactive-函数处理数组"  data-scroll-to="#reactive-函数处理数组"><span class="toc-number">2.2.</span> <span class="toc-text">reactive 函数处理数组</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-calendar trm-icon"></i><br>
+            10/13
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-clock trm-icon"></i><br>
+            17:11
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont iconfont icon-user trm-icon"></i><br>
+            ljylwnxx
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="ref-函数介绍"><a href="#ref-函数介绍" class="headerlink" title="ref 函数介绍"></a>ref 函数介绍</h1><ol>
+<li>ref 作用就是将基础数据转换为响应式数据，把数据包装成响应式的引用数据类型的数据。</li>
+<li>通过对参数返回值的 value 属性获取响应式的值，并且修改的时候也需要对 value 进行修改。</li>
+<li>在vue2当中，通过给元素添加 ref=’xxx’然后使用refs.xxx的方式来获取元素，vue3也可以。</li>
+<li>当 ref 里面的值发生变化的时候，视图会自动更新数据。</li>
+<li>ref 可以操作基本数据类型和复杂数据类型，建议使用 ref 操作只对基本数据类型进行操作。</li>
+</ol>
+<h2 id="ref-函数使用"><a href="#ref-函数使用" class="headerlink" title="ref 函数使用"></a>ref 函数使用</h2><p>使用 ref 函数很简单，首先要在页面引用，然后就可以直接使用了，具体怎么使用呢，下面为了方便介绍，简单来几个案例。</p>
+<h2 id="ref-函数处理基本数据类型"><a href="#ref-函数处理基本数据类型" class="headerlink" title="ref 函数处理基本数据类型"></a>ref 函数处理基本数据类型</h2><p>首先提一个需求：页面有一个名称需要显示，有一个按钮，点击按钮的时候修改页面展示的这个名字。<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>刷新，可以正常渲染数据，但是点击按钮修改名字的时候，出现问题！<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E5%9F%BA%E6%9C%AC%E5%87%BA%E9%94%99.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E5%9F%BA%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%8F%B0.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>为什么使用过 ref 将数据映射为响应式数据还是报错呢？我们可以先打印一下 ref 包裹后，也就是 name_ref 这个参数，看一下结构。<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E7%BB%93%E6%9E%84.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>修改代码：<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>码刷新页面查看效果<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E5%9F%BA%E6%9C%AC%E4%BF%AE%E6%94%B9%E6%88%90%E5%8A%9F.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>有一点需要说一下哈，就是在单文件组件中，不必写value，因为setup方法会自动解析，简单的可以理解成 html 代码不需要额外操作 value，但是逻辑层需要。</p>
+<h2 id="ref-函数处理复杂数据类型"><a href="#ref-函数处理复杂数据类型" class="headerlink" title="ref 函数处理复杂数据类型"></a>ref 函数处理复杂数据类型</h2><p>不建议使用 ref 函数处理复杂数据类型（数组、对象等），用 ref 函数处理基本数据类型（数字、字符串等）就可以了。<br>例如我们写一个案例，创建一个个人信息，放到对象里面展示<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E5%A4%8D%E6%9D%82%E6%95%B0%E6%8D%AE%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>我们先看一下对象被 ref 函数包裹后的数据结构。<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E5%A4%8D%E6%9D%82%E7%BB%93%E6%9E%84.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>我们修改也通过 value 进行操作<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E5%A4%8D%E6%9D%82%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>刷新页面，查看效果<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E5%A4%8D%E6%9D%82%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81%E6%88%90%E5%8A%9F.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="ref-函数获取单个DOM元素"><a href="#ref-函数获取单个DOM元素" class="headerlink" title="ref 函数获取单个DOM元素"></a>ref 函数获取单个DOM元素</h2><p>和 vue2 一样，可以使用 ref 获取元素，用法和操作数据类型相似。<br>页面上有一个标签，点击按钮，获取标签的相关数据。<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/refdom%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>运行效果<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E6%88%90%E5%8A%9F.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/ref%E6%89%93%E5%8D%B0.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h1 id="reactive-函数介绍"><a href="#reactive-函数介绍" class="headerlink" title="reactive 函数介绍"></a>reactive 函数介绍</h1><p>上面说了 ref 函数的基本用法，接下来是 reactive 函数，它的用法与 ref 函数的用法相似，也是将数据变成响应式数据，当数据发生变化时UI也会自动更新。不同的是 ref 用于基本数据类型，而 reactive 是用于复杂数据类型，所以说，不建议用 ref 函数来处理复杂数据类型的原因就是，有 reactive 来处理复杂类型数据。</p>
+<h2 id="reactive-函数使用"><a href="#reactive-函数使用" class="headerlink" title="reactive 函数使用"></a>reactive 函数使用</h2><p>reactive 函数处理对象<br>reactive 函数用来处理数组或者是对象,写一个案例，操作人的基本信息<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/reactive%E5%AF%B9%E8%B1%A1%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/reactive%E5%AF%B9%E8%B1%A1%E7%BB%93%E6%9E%9C.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>有打印的结果我们可以看见，这时候的数据就不是被包裹在 value 下面了，所以说我们可以直接获取到。<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/reactive%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/reactive%E5%AF%B9%E8%B1%A1%E4%BF%AE%E6%94%B9%E7%BB%93%E6%9E%9C.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="reactive-函数处理数组"><a href="#reactive-函数处理数组" class="headerlink" title="reactive 函数处理数组"></a>reactive 函数处理数组</h2><p>处理数组的方式和处理对象的方式是一样一样的<br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/reactive%E6%95%B0%E7%BB%84%E4%BB%A3%E7%A0%81.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br><img src="/2022/10/13/vue3ref%E5%92%8Creactive%E5%87%BD%E6%95%B0/reactive%E6%95%B0%E7%BB%84%E5%A4%84%E7%90%86%E7%BB%93%E6%9E%9C.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+
+</article>
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <div class="trm-cover-img" data-random-img></div>
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/vue3/">
+                    vue3
+                </a>
+            </div>
+            <h5>
+                <a href="/2022/10/14/Vue3toRef%E5%92%8CtoRefs%E5%87%BD%E6%95%B0/" class="trm-anima-link">
+                    Vue3toRef和toRefs函数
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>22/10/14</li>
+                <li>21:48</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2022/10/13/Vue3setup%E5%87%BD%E6%95%B0/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <div class="trm-cover-img" data-random-img></div>
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/vue3/">
+                    vue3
+                </a>
+            </div>
+            <h5>
+                <a href="/2022/10/13/Vue3setup%E5%87%BD%E6%95%B0/" class="trm-anima-link">
+                    Vue3setup函数
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>22/10/13</li>
+                <li>10:45</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2023</span>
+            <span class="footer-separator"data-separator=" | "></span>
+            <span class="trm-accent-color">LjylWnxx</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.4.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            博客已运行 <span id="since" class="trm-accent-color"></span> 天
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        var BirthDay = new Date("08/16/2022 21:45:54");
+        var today = new Date();
+        var timeold = (today.getTime() - BirthDay.getTime());
+        var msPerDay = 24 * 60 * 60 * 1000
+        var day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont iconfont icon-read"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont iconfont icon-arrows-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont iconfont icon-i-back-top"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont iconfont icon-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont iconfont icon-close"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.0.7"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.0.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.7"></script>
+
+</body>
+
+</html>
